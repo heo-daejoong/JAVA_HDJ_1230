@@ -6,9 +6,11 @@ public class Ex03_Variable_Number {
 		byte num1 = 1;
 		//num1 = 12345; // byte가 저장할 수 있는 범위를 넘었기에 에러 발생.
 		System.out.println(num1);
+		
 		int num2 = 123456789;
 		//num2 = 123456789012; // int가 저장할 수 있는 범위를 넘었기에 에러 발생.
 		System.out.println(num2);
+		
 		long num3 = 123456789012L; // 접미사 L, l을 안 붙으면 에러 발생. L이 안 붙으면 int형이기 때문.
 		System.out.println(num3);
 		

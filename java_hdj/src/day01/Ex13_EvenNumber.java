@@ -11,10 +11,10 @@ public class Ex13_EvenNumber {
 		 * 4는 짝수인가? true
 		 */
 		
-		int num = 4;
+		int num = 7;
 		//num을 2로 나누었을때 나머지가 0과 같다
 		boolean isEven = (num % 2 == 0);
-		System.out.println(num + "는 짝수와 같다." + isEven );
+		System.out.println(num + "는 짝수와 같다. " + isEven );
 		
 		
 		
