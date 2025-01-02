@@ -5,41 +5,43 @@ import java.util.Scanner;
 public class Exex01_Practice {
 
 	public static void main(String[] args) {
-		/* switch문을 이용해서 두 정수의 산술 연산 결과를 출력하는 코드를 작성하세요
-		 * 두 정수와 산술 연산자를 입력하세요(예 : 1 + 2) : 3 * 4
-		 * 1 / 2 = 0.5
+		/* 정수 num가 2의 배수인지, 3의 배수인지, 6의 배수인지, 2,3,6의 배수가 아닌지를 판별하는 코드를 작성하세요
+		 * 2 : 2의 배수
+		 * 3 : 3의 배수
+		 * 4 : 2의 배수
+		 * 5 : 2,3,6의 배수가 아님
+		 * 6 : 6의 배수
 		 * */
-		Scanner scan = new Scanner(System.in);
 		
-		System.out.print("두 정수와 산술 연산자를 입력하세요(예 : 1 + 2) : ");
+		int num = 14;
+		
+		if(num % 2 == 0) {
+			if(num % 3 == 0) {
+				System.out.println(num + "는 6의 배수");
+			}
+			else {
+				System.out.println(num + "는 2의 배수");
+			}
+		}
+		else if(num % 3 == 0) {
+			System.out.println(num + "는 3의 배수");
+		}
+		else {
+			System.out.println(num + "는 2, 3, 6의 배수가 아님");
+		}
+		
+		Scanner scan = new Scanner(System.in);
 		
 		int num1, num2;
 		char operator;
+		
+		System.out.print("문제");
 		
 		num1 = scan.nextInt();
 		operator = scan.next().charAt(0);
 		num2 = scan.nextInt();
 		
-		switch(operator) {
-		case '+':
-			System.out.println("" + num1 + " " + operator + " " + num2 + " " + " = " + (num1 + num2));
-			break;
-		case '-':
-			System.out.println("" + num1 + " " + operator + " " + num2 + " " + " = " + (num1 - num2));
-			break;
-		case '*':
-			System.out.println("" + num1 + " " + operator + " " + num2 + " " + " = " + (num1 * num2));
-			break;
-		case '/':
-			System.out.println("" + num1 + " " + operator + " " + num2 + " " + " = " + ((double)num1 / num2));
-			break;
-		case '%':
-			System.out.println("" + num1 + " " + operator + " " + num2 + " " + " = " + (num1 % num2));
-			break;
-		default:System.out.println(operator + "는 잘못된 연산자");
-		}
-		
-		
+		System.out.println(num1 + " " + operator + " " + num2);
 		
 		
 	}
