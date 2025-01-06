@@ -19,7 +19,7 @@ public class Ex09_Menu {
 		 * */
 		//반복문
 		char menu;
-		
+		Scanner scan = new Scanner(System.in);
 		do {
 			//메뉴 출력
 			public static void printMenu() {
