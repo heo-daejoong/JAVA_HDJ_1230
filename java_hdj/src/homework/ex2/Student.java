@@ -2,6 +2,7 @@ package homework.ex2;
 
 import lombok.Data;
 
+//getter, setter, toString, equals 등을 제공
 @Data
 public class Student {
 
