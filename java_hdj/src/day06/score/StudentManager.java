@@ -1,5 +1,6 @@
 package day06.score;
 
+//학생 정보를 관리하는 프로그램로 학생 정보를 추가, 조회하는 기능을 가짐
 public class StudentManager {
 
 	private Student [] std = new Student[5];
@@ -16,7 +17,9 @@ public class StudentManager {
 		Student tmp[] = new Student[std.length + 5];
 		//복사
 		System.arraycopy(std, 0, tmp, 0, std.length);
+		std = tmp;
 	}
+	
 	
 	public void insertStudent(String name, int score){
 		std[count++] = new Student(name, score);

@@ -1,5 +1,6 @@
 package day06.score;
 
+//학생 정보가 있는 클래스
 public class Student {
 
 	private String name;

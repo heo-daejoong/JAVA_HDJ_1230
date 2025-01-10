@@ -2,6 +2,7 @@ package day06.score;
 
 import java.util.Scanner;
 
+//학생 성적을 관리하는 프로그램
 public class StudentProgram {
 
 	
