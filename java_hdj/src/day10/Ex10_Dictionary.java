@@ -113,21 +113,55 @@ public class Ex10_Dictionary {
 	private static void searchWord() {
 		//단어 입력
 		//단어장에 있는 단어가 검색 단어를 포함하고 있으면 출력
+		System.out.print("단어 : ");
+		String word = scan.nextLine();
+		int count = 0;
+		for(Word tmp : list) {
+			if(tmp.getWord().contains(word)) {
+				System.out.println(tmp);
+				count++;
+			}
+		}
+		if(count == 0) {
+			System.out.println("일치하는 단어가 없습니다.");
+		}
 	}
 	
 
 	private static void deleteWord() {
 		//단어를 입력
+		System.out.print("단어 : ");
+		String word = scan.nextLine();
 		//단어가 있으면 단어를 삭제 후 알림문구 출력
 		//없으면 알림문구 출력
+		if(list.remove(new Word(word, ""))) {
+			System.out.println("단어를 삭제했습니다.");
+		}
+		else {
+			System.out.println("일치하는 단어가 없습니다.");
+		}
 	}
 
 	private static void updateWord() {
 		//단어와 새 뜻을 입력
+		System.out.print("단어 : ");
+		String word = scan.nextLine();
+		
+		System.out.print("의미 : ");
+		String meaning = scan.nextLine();
 		//단어가 없으면 알림문구 후 종료
 		//단어가 몇번인지 확인 후 -1번지이면 알림문구 후 종료
+		Word wordObj = new Word(word, meaning);
+		
+		int index = list.indexOf(wordObj);
+		if(index < 0) {
+			System.out.println("일치하는 단어가 없습니다.");
+			return;
+		}
 		//단어를 수정
 		//번지에 있는 단어를 가져와서 단어를 수정
+		list.set(index, wordObj);
+		System.out.println("단어를 수정했습니다.");
 	}
 
 	private static void insertWord() {
@@ -180,5 +214,11 @@ class Word{
 		return Objects.equals(word, other.word);
 	}
 
+	@Override
+	public String toString() {
+		return word + " : " + meaning;
+	}
+
+	
 }
 
