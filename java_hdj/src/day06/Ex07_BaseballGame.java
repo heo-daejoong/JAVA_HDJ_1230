@@ -3,7 +3,7 @@ package day06;
 import java.util.Arrays;
 import java.util.Scanner;
 
-public class Ex07_BaceballGame {
+public class Ex07_BaseballGame {
 
 	public static void main(String[] args) {
 		/* 1 ~ 9 숫자 야구 게임을 구현하세요.
