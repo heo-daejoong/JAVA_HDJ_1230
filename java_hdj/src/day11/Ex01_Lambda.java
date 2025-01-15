@@ -11,7 +11,8 @@ public class Ex01_Lambda {
 		MyMath mm2 = new MyMath() {
 			
 			@Override
-			public int max(int num1, int num2) {num1 > num2 ? num1 : num2;
+			public int max(int num1, int num2) {
+			return num1 > num2 ? num1 : num2;
 			}
 		};
 		System.out.println(mm2.max(1, 2));
