@@ -173,7 +173,7 @@ public class Ex03_Student {
 		print(list, s->s.getGrade() == grade);
 	}
 
-	
+
 
 	private static void searchClassnum() {
 		System.out.print("학년 : ");

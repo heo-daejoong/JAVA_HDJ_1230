@@ -3,8 +3,6 @@ package day12;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -12,9 +10,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.Predicate;
-import java.util.stream.Stream;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -39,22 +34,11 @@ public class Ex09_ObjectStream2 {
 	
 	public static void main(String[] args) {
 		
-		String filename = "src/day12/object_stream2.txt";
+		String filename = "src/day12/car.txt";
 		
 		int menu;
 		
-		try(FileInputStream fis = new FileInputStream(filename);
-				ObjectInputStream ois = new ObjectInputStream(fis)){
-			Car c = (Car)ois.readObject();
-			System.out.println(c);
-		} catch (FileNotFoundException e) {
-			System.out.println("파일을 찾을 수 없습니다.");
-		}catch (IOException e) {
-			System.out.println("IO 예외 발생");
-			e.printStackTrace();
-		} catch (ClassNotFoundException e) {
-			System.out.println("클래스를 찾을 수 없습니다.");
-		}
+		load(filename, list);
 		
 		do {
 			
@@ -68,15 +52,42 @@ public class Ex09_ObjectStream2 {
 			
 		}while(menu != 3);
 		
-		try(FileOutputStream fos = new FileOutputStream(filename);
-				ObjectOutputStream oos = new ObjectOutputStream(fos)){
-			Car c = new Car(filename, filename);
-			oos.writeObject(c);
+		save(filename, list);
+		
+	}
+
+	private static void load(String filename, List<Car> list) {
+		
+		try(FileInputStream fis = new FileInputStream(filename);
+				ObjectInputStream ois = new ObjectInputStream(fis)){
+			
+			List<Car> tmp = (ArrayList<Car>) ois.readObject();
+			
+			list.addAll(tmp);
+		
 		} catch (FileNotFoundException e) {
 			System.out.println("파일을 찾을 수 없습니다.");
 		} catch (IOException e) {
 			System.out.println("IO 예외 발생");
 			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			System.out.println("클래스를 찾을 수 없습니다.");
+		}
+		
+	}
+
+	private static void save(String filename, List<Car> list) {
+		
+		try(FileOutputStream fos = new FileOutputStream(filename);
+				ObjectOutputStream oos = new ObjectOutputStream(fos)){
+			
+			oos.writeObject(list);
+		
+		} catch (FileNotFoundException e) {
+			System.out.println("파일을 찾을 수 없습니다.");
+			e.printStackTrace();
+		} catch (IOException e) {
+			System.out.println("IO 예외 발생");
 		}
 		
 	}
@@ -96,7 +107,7 @@ public class Ex09_ObjectStream2 {
 			insertCar();
 			break;
 		case 2:
-			searchCar();
+			printCar();
 			break;
 		case 3:
 			System.out.println("프로그램을 종료합니다.");
@@ -107,40 +118,36 @@ public class Ex09_ObjectStream2 {
 	}
 
 	private static void insertCar() {
-		System.out.print("자동차 이름 : ");
-		String name = scan.nextLine();
-		
 		System.out.print("자동차 브랜드 : ");
 		String brand = scan.nextLine();
 		
-		Car c = new Car(name, brand);
-		list.add(c);
-		System.out.println(list);
-			
+		System.out.print("자동차 이름 : ");
+		String name = scan.nextLine();
+		
+		list.add(new Car(name, brand));
 		
 	}
 
-	private static void searchCar() {
-		
-		searchAll();
-		
-	}
-
-	private static void searchAll() {
-		print(list, c->true, false);
-		
-	}
-
-	private static void print(List<Car> list, Predicate<Car> p, boolean isCount) {
-		Stream<Car> stream = list.stream();
-		AtomicInteger index = new AtomicInteger(1);
-		
-		stream.filter(p).forEach(c->{
-			int num = index.getAndIncrement();
-			System.out.println( (isCount ? num + ". " : "") + c);
+	private static void printCar() {
+		//브랜드를 비교하여 다르면 사전순으로 정렬
+		list.sort((o1, o2)->{
+			if(!o1.getBrand().equals(o2.getBrand())) {
+				return o1.getBrand().compareTo(o2.getBrand());
+			}
+			//이름을 사전순으로 정렬
+			return o1.getName().compareTo(o2.getName());
 		});
+		
+		for(Car car : list) {
+			System.out.println(car);
+		}
+		
 	}
-}
+
+
+	
+	}
+
 @Data
 @AllArgsConstructor
 class Car implements Serializable{
@@ -150,7 +157,7 @@ class Car implements Serializable{
 
 	@Override
 	public String toString() {
-		return name + " : " + brand;
+		return brand + " : " + name;
 	}
 	
 	
