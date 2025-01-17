@@ -66,6 +66,8 @@ public class Homework {
 		
 		int menu;
 		
+		final int EXIT = 5;
+		
 		do {
 			printMenu();
 			
@@ -75,7 +77,7 @@ public class Homework {
 			
 			runMenu(menu);
 			
-		}while(menu != 5);
+		}while(menu != EXIT);
 		
 		
 	}
