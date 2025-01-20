@@ -10,7 +10,11 @@ public interface ConsoleProgram {
 	
 	void runMenu(int menu);
 	
-	Object load(String fileName);
+	default Object load(String fileName) {
+		
+	}
 	
-	void save(String fileName, Object obj);
+	default void save(String fileName, Object obj) {
+		
+	}
 }

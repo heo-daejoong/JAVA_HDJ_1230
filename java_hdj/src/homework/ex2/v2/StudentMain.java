@@ -41,6 +41,7 @@ import java.util.ArrayList;
  * 	- 학년, 반, 번호를 입력하면 학생 있으면 학생 성적을 조회
  * */
 public class StudentMain {
-
+	StudentProgram program = new StudentProgram();
+	program.run();
 	
 }

@@ -16,5 +16,5 @@ public class SubjectManager {
 	
 	public SubjectManager() {
 		this.list = new ArrayList<Subject>();
-}
+	}
 }
