@@ -35,6 +35,7 @@ public class Server {
 		});
 		t.start();
 	}
+	
 	private void runMenu(int menu, ObjectInputStream ois, ObjectOutputStream oos) {
 		switch(menu) {
 		case 1:
