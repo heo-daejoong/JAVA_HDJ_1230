@@ -20,7 +20,7 @@ public class Ex01_Server {
 		int port = 5002;
 		
 		try {
-			ServerSocket serverSocket = new ServerSocket();
+			ServerSocket serverSocket = new ServerSocket(port);
 			while(true) {
 				Socket socket = serverSocket.accept();
 				Thread t = new Thread(()->{
