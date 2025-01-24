@@ -18,7 +18,7 @@ public class Server {
 	private ObjectOutputStream oos;
 	private List<Account> list;
 	
-	public Server(Socket socket2, List<Account> list2) {
+	public Server(Socket socket, List<Account> list) {
 		this.socket = socket;
 		this.list = list;
 		if(socket == null) {
