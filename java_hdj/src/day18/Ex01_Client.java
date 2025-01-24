@@ -27,106 +27,20 @@ public class Ex01_Client {
 	
 	public static void main(String[] args) {
 		
+		//서버와 소켓으로 연결 : 실패 시 프로그램 종료
+		
 		String ip = "127.0.0.1";
-		int port = 5001;
-		Socket socket;
-		ObjectInputStream ois;
-		ObjectOutputStream oos;
+		int port = 5003;
 		
-		try {
-			socket = new Socket(ip, port);
-			oos = new ObjectOutputStream(socket.getOutputStream());
-			ois = new ObjectInputStream(socket.getInputStream());
-			System.out.println("[연결 성공]");
-			
+		try(Socket socket = new Socket(ip, port)) {
+			System.out.println("[서버와 연결되었습니다.]");
+			ClientProgram program = new ClientProgram(socket);
+			program.run();
+		
 		}catch(Exception e) {
-			System.out.println("[연결 실패]");
-			System.out.println("프로그램 종료");
-			return;
-		}
+			System.out.println("[서버와 연결되지 않아 프로그램을 종료합니다.]");
+			e.printStackTrace();
 		
-		int menu = 0;
-		final int EXIT = 3;
-		
-		do {
-			printMenu();
-			
-			menu = scan.nextInt();
-			scan.nextLine();
-			
-			runMenu(menu, ois, oos);
-		}while(menu != EXIT);
-	}
-
-	private static void printMenu() {
-		System.out.print("----------------\r" + 
-						 "1. 접속\r" + 
-						 "2. 계좌 개설\r" +	
-						 "3. 종료\r" +
-						 "----------------\r" +
-						 "메뉴 선택 : ");
-		
-	}
-
-	private static void runMenu(int menu, ObjectInputStream ois, ObjectOutputStream oos) {
-		switch(menu) {
-		case 1:
-			logIn(ois, oos);
-			break;
-		case 2:
-			bankNum(ois, oos);
-			break;
-		case 3: 
-			System.out.println("프로그램 종료");
-			break;
-		default :
-			System.out.println("올바른 메뉴가 아닙니다.");
-		}
-		
-	}
-
-	private static void logIn(ObjectInputStream ois, ObjectOutputStream oos) {
-		System.out.print("은행 : ");
-		String bankName = scan.nextLine();
-		System.out.print("계좌번호 : ");
-		int bankNum = scan.nextInt();
-		System.out.print("비밀번호 : ");
-		int passWord = scan.nextInt();
-		
-	}
-
-	private static void bankNum(ObjectInputStream ois, ObjectOutputStream oos) {
-		try {
-			Bank bank = input();
-			
-			oos.writeObject(bank);
-			oos.flush();
-			
-			boolean res = ois.readBoolean();
-			
-			if(res) {
-				System.out.println("계좌를 개설했습니다.");
-			}else {
-				System.out.println("계좌 개설에 실패했습니다.");
-			}
-		}catch(Exception e) {
-			System.out.println("예외 발생");
 		}
 	}
-
-	private static Bank input() {
-		System.out.print("은행 : 	");
-		String bankName = scan.nextLine();
-		System.out.print("이름 : ");
-		String name = scan.nextLine();
-		System.out.print("계좌번호 : ");
-		int bankNum = scan.nextInt();
-		System.out.print("비밀번호 : ");
-		int passWord = scan.nextInt();
-		System.out.print("비밀번호 확인 : ");
-		int passWordTo = scan.nextInt();
-		
-		return new Bank(bankName, name, bankNum, passWord, passWordTo);
-	}
-
 }

@@ -1,26 +1,22 @@
 package day18;
 
-import java.io.Serializable;
-import java.util.Objects;
-
-import lombok.Data;
-
-@Data
-public class Bank implements Serializable{
-
-	private static final long serialVersionUID = -4585362708055321905L;
+public enum Bank {
+	신한, 국민, 우리;
 	
-	private String bankName, name;
-	private int bankNum, passWord, passWordTo;
-	
-	public Bank(String bankName, String name, int bankNum, int passWord, int passWordTo) {
+	public static void printBanks() {
+		Bank [] list = Bank.values();
 		
-		this.bankName = bankName;
-		this.name = name;
-		this.bankNum = bankNum;
-		this.passWord = passWord;
-		this.passWordTo = passWordTo;
+		for(int i = 0; i < list.length; i++) {
+			System.out.print((i == 0 ? "" : ",") +list[i]);
+		}
+		System.out.println();
 	}
 	
-	
+	public static boolean check(String str) {
+		try {
+			return Bank.valueOf(str) != null;
+		}catch(Exception e) {
+			return false;
+		}
+	}
 }
