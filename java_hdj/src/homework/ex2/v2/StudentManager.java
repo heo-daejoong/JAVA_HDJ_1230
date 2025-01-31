@@ -24,7 +24,7 @@ public class StudentManager {
 	}
 
 	public boolean insertStudent(Student std) {
-		if(std == null || list == null || list == null) {
+		if(std == null || list == null) {
 			return false;
 		}
 		if(list.contains(std)) {
@@ -38,7 +38,7 @@ public class StudentManager {
 		
 		return index < 0 ? null : list.get(index);
 	}
-
+	//1 1 1 => 1 1 1
 	public boolean updateStudent(Student selStd, Student newStd) {
 		if(selStd == null || newStd == null || list == null) {
 			return false;
@@ -47,7 +47,7 @@ public class StudentManager {
 			return false;
 		}
 		Student tmp = getStudent(newStd);
-		//수정된 정보가 없거나 이전 학생 정보이면 수정
+		//수정될 정보가 업거나 이전 학생 정보이면 수정 
 		if(tmp == null || tmp == getStudent(selStd)) {
 			getStudent(selStd).update(newStd);
 			return true;
@@ -66,11 +66,10 @@ public class StudentManager {
 		if(std == null) {
 			System.out.println("학생 정보가 없습니다.");
 			return;
-		}
+		}	
 		if(list == null) {
 			System.out.println("학생 리스트가 없습니다.");
 			return;
-			
 		}
 		Student tmp = getStudent(std);
 		if(tmp == null) {
@@ -99,12 +98,11 @@ public class StudentManager {
 		if(std == null) {
 			return false;
 		}
-		
 		return std.updateScore(subject, subjectScore);
 	}
 
 	public boolean deleteScore(Student std, Subject subject) {
-		if(std == null || subject == null || list == null) {
+		if (std == null || subject == null || list == null) {
 			return false;
 		}
 		std = getStudent(std);
@@ -117,14 +115,23 @@ public class StudentManager {
 	public void printScore(Student std, Subject subject) {
 		if(std == null || subject == null || list == null) {
 			System.out.println("출력할 수 없습니다.");
-			return;
+			return ;
 		}
 		std = getStudent(std);
 		if(std == null) {
-			System.out.println("일치하는 학생이 없습니다");
+			System.out.println("일치하는 학생이 없습니다.");
 			return;
 		}
 		std.printScore(subject);
-		
 	}
 }
+
+
+
+
+
+
+
+
+
+

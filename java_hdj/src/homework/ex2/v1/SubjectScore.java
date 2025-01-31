@@ -6,12 +6,12 @@ import java.util.Objects;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
- 
 @Data
 @AllArgsConstructor
-public class SubjectScore implements Serializable{
+public class SubjectScore implements Serializable {
 
 	private static final long serialVersionUID = 5589823857268140091L;
+	
 	private Subject subject;
 	private int score;
 	

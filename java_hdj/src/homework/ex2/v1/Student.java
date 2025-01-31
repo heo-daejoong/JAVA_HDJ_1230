@@ -3,30 +3,27 @@ package homework.ex2.v1;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 import lombok.Data;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 
 //getter, setter, toString, equals등을 제공
 @Data
-public class Student implements Serializable{
+@RequiredArgsConstructor //상수나 @NonNull이 붙은 필드만을 이용한 생성자를 추가
+public class Student implements Serializable {
 
-	private static final long serialVersionUID = -551090066386724638L;
+	private static final long serialVersionUID = 5521587507723517094L;
+	
+	@NonNull
 	private int grade, classNum, num;
+	@NonNull
 	private String name;
 	
 	//학생 개인의 성적을 담고 있는 배열
-	public List<SubjectScore> list;
+	public List<SubjectScore> list = new ArrayList<SubjectScore>();
 
-	public Student(int grade, int classNum, int num, String name) {
-		
-		this.grade = grade;
-		this.classNum = classNum;
-		this.num = num;
-		this.name = name;
-		list = new ArrayList<SubjectScore>();
-	}
-
+	//equals를 오버라이딩, 학년, 반, 번호를 이용
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -39,10 +36,6 @@ public class Student implements Serializable{
 		return classNum == other.classNum && grade == other.grade && num == other.num;
 	}
 
-	@Override
-	public int hashCode() {
-		return Objects.hash(classNum, grade, num);
-	}
 	public void print() {
 		System.out.println("-----------------");
 		System.out.println(grade + "학년 " + classNum + "반 " + num + "번 " + name);
@@ -60,11 +53,11 @@ public class Student implements Serializable{
 		if(newStd == null) {
 			return;
 		}
+		
 		grade = newStd.grade;
 		classNum = newStd.classNum;
 		num = newStd.num;
 		name = newStd.name;
-		
 	}
 
 	public boolean insertScore(SubjectScore subjectScore) {
@@ -82,6 +75,7 @@ public class Student implements Serializable{
 			return;
 		}
 		System.out.println(list.get(index));
+		
 	}
 
 	public boolean updateScore(Subject subject, SubjectScore subjectScore) {
@@ -109,10 +103,7 @@ public class Student implements Serializable{
 	}
 
 	public boolean deleteScore(Subject subject) {
-		
+
 		return list.remove(new SubjectScore(subject, 0));
 	}
-	
-	
-	//equals를 오버라이딩, 학년, 반, 번호를 이용
 }
