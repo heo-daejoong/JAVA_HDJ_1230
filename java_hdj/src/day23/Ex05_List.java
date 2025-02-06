@@ -26,7 +26,6 @@ public class Ex05_List {
 		 list.add(new Point());
 		 list.add("안녕");
 		 list.add(1);
-		 
 		
 	}
 }
