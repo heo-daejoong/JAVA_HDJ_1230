@@ -25,11 +25,9 @@
 
 		//전체 체크박스를 change 이벤트를 등록
 		all.addEventListener("change", ()=>{
-			alert(1);
 
 			//전체 체크박스의 checked 값을 가져옴(checked는 표준 속성)
 			let checked = all.checked;
-			alert(checked);
 
 			//반복으로 다른 체크박스 요소들을 하나씩 꺼내서 각 요소들의 checked 값을 전체 체크박스의 checked 값으로 수정
 			checkboxes.forEach(checkbox=>{
