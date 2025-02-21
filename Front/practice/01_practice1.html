@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>연습문제</title>
+</head>
+<body>
+	<input type="checkbox" name="" id="all">
+	<label for="all">전체</label>
+	<br>
+	<input type="checkbox" name="email">
+	<br>
+	<input type="checkbox" name="email">
+	<br>
+	<input type="checkbox" name="email">
+	<br>
+	<input type="checkbox" name="email">
+	<br>
+	<script>
+		const all = document.getElementById("all");
+
+		const checkboxes = document.querySelectorAll("[name=email]");
+
+		all.addEventListener("change", ()=>{
+			let checked = all.checked;
+
+			checkboxes.forEach(checkbox=>{
+				checkbox.checked = checked;
+			});
+		});
+
+		checkboxes.forEach(checkbox=>{
+			checkbox.addEventListener("change", ()=>{
+				let checked = checkbox.checked;
+
+				if(!checked){
+					all.checked = false;
+					return;
+				}
+
+				let selector = "[name=email]:checked";
+				let sameCheckboxes = document.querySelectorAll(selector);
+
+				if(sameCheckboxes.length == checkboxes.length){
+					all.checked = checked;
+				}
+			})
+		})
+	</script>
+</body>
+</html>
