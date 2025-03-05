@@ -14,7 +14,7 @@ import lombok.RequiredArgsConstructor;
 public class Student implements Serializable {
 
 	private static final long serialVersionUID = 5521587507723517094L;
-	private int st_key; //st_key
+	private int key; //st_key
 	@NonNull
 	private int grade, classNum, num; //st_grade, st_class, st_num
 	@NonNull
@@ -106,4 +106,10 @@ public class Student implements Serializable {
 
 		return list.remove(new SubjectScore(subject, 0));
 	}
+
+	@Override
+	public String toString() {
+		return grade + "학년 " + classNum + "반 " + num + "번 " + name + " ";
+	}
+	
 }
