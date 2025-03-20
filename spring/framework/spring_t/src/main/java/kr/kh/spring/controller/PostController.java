@@ -2,11 +2,17 @@ package kr.kh.spring.controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 
+import kr.kh.spring.model.vo.BoardVO;
+import kr.kh.spring.model.vo.MemberVO;
 import kr.kh.spring.model.vo.PostVO;
 import kr.kh.spring.service.PostService;
 
@@ -17,12 +23,105 @@ public class PostController {
 	private PostService postService;
 	
 	@GetMapping("/post/list")
-	public String postList(Model model) {
-		//ê²Œì‹œê¸€ ëª©ë¡ ì „ì²´ë¥¼ ê°€ì ¸ì˜´
-		List<PostVO> list = postService.getPostList();
-		//í™”ë©´ì— ê²Œì‹œê¸€ ëª©ë¡ì„ ì „ì†¡
-		//ë§¤í¼ì˜ resultType=kr.kh.spring.model.vo.postVO
+	public String postList(Model model, Integer po_bo_num) {
+		
+		po_bo_num = po_bo_num == null ? 0 : po_bo_num;
+		
+		//°Ô½Ã±Û ¸ñ·Ï ÀüÃ¼¸¦ °¡Á®¿È
+		List<PostVO> list = postService.getPostList(po_bo_num);
+		
+		List<BoardVO> boardList = postService.getBoardList();
+		
+		model.addAttribute("boardList", boardList);
+		
+		//È­¸é¿¡ °Ô½Ã±Û ¸ñ·ÏÀ» Àü¼Û
+		//¸ÅÆÛÀÇ resultType=kr.kh.spring.model.vo.postVO
 		model.addAttribute("list", list);
+		model.addAttribute("po_bo_num", po_bo_num);
 		return "/post/list";
+	}
+	
+	@GetMapping("/post/insert")
+	public String postInsert(Model model) {
+		//µî·ÏµÈ °Ô½ÃÆÇ ¸®½ºÆ®¸¦ °¡Á®¿Í È­¸é¿¡ Àü¼Û
+		List<BoardVO> list = postService.getBoardList();
+		model.addAttribute("list", list);
+		return "/post/insert";
+	}
+	
+	@PostMapping("/post/insert")
+	public String postInsertPost(Model model, PostVO post, HttpSession session) {
+		MemberVO user = (MemberVO) session.getAttribute("user");
+		if(postService.insertPost(post, user)) {
+			model.addAttribute("url", "/post/list");
+			model.addAttribute("msg", "°Ô½Ã±ÛÀ» µî·ÏÇß½À´Ï´Ù.");
+		}else {
+			model.addAttribute("url", "/post/insert");
+			model.addAttribute("msg", "°Ô½Ã±ÛÀ» µî·ÏÇÏÁö ¸øÇß½À´Ï´Ù.");
+		}
+		return "/msg/msg";
+	}
+	
+	@GetMapping("/post/detail/{po_num}")
+	public String postDetail(Model model, @PathVariable("po_num")int po_num) {
+		//°Ô½Ã±Û Á¶È¸¼ö¸¦ Áõ°¡
+		postService.updateView(po_num);
+		//°Ô½Ã±ÛÀ» °¡Á®¿È
+		PostVO post = postService.getPost(po_num);
+		//È­¸é¿¡ Àü¼Û
+		model.addAttribute("post", post);
+		return "/post/detail";
+	}
+	
+	@GetMapping("/post/delete/{po_num}")
+	public String postDelete(Model model, @PathVariable("po_num")int po_num, HttpSession session) {
+		//·Î±×ÀÎÇÑ È¸¿ø Á¤º¸¸¦ °¡Á®¿È
+		//ÃßÈÄ »èÁ¦ ¿¹Á¤
+		MemberVO user = (MemberVO) session.getAttribute("user");
+		if(postService.deletePost(po_num, user)) {
+			model.addAttribute("url", "/post/list");
+			model.addAttribute("msg", "°Ô½Ã±ÛÀ» »èÁ¦Çß½À´Ï´Ù.");
+		}else {
+			model.addAttribute("url", "/post/detail/" + po_num);
+			model.addAttribute("msg", "°Ô½Ã±ÛÀ» »èÁ¦ÇÏÁö ¸øÇß½À´Ï´Ù.");
+		}
+		return "/msg/msg";
+	}
+	
+	@GetMapping("/post/update/{po_num}")
+	public String postUpdate(Model model, @PathVariable("po_num")int po_num, HttpSession session) {
+		
+		List<BoardVO> list = postService.getBoardList();
+		model.addAttribute("list", list);
+		
+		//°Ô½Ã±ÛÀ» °¡Á®¿È
+		PostVO post = postService.getPost(po_num);
+		//ÀÛ¼ºÀÚÀÎÁö ¾Æ´ÑÁö È®ÀÎÇÏ´Â ÀÛ¾÷
+		//ÃßÈÄ »èÁ¦ ¿¹Á¤
+		MemberVO user = (MemberVO) session.getAttribute("user");
+		//·Î±×ÀÎ ¾ÈµÇ¾î ÀÖ°Å³ª, ¾ø´Â °Ô½Ã±ÛÀÌ°Å³ª, ÀÛ¼ºÀÚ°¡ ¾Æ´Ï¸é
+		if(user == null || post == null || !post.getPo_me_id().equals(user.getMe_id())) {
+			model.addAttribute("url", "/post/list");
+			model.addAttribute("msg", "ÀÛ¼ºÀÚ°¡ ¾Æ´Ï°Å³ª ¾ø´Â °Ô½Ã±ÛÀÔ´Ï´Ù.");
+			return "/msg/msg";
+		}else {
+			//È­¸é¿¡ Àü¼Û
+			model.addAttribute("post", post);
+			return "/post/update";
+		}
+		
+	}
+	
+	@PostMapping("/post/update")
+	public String postUpdatePost(Model model, PostVO post, HttpSession session) {
+		//ÃßÈÄ »èÁ¦ ¿¹Á¤
+		MemberVO user = (MemberVO) session.getAttribute("user");
+		if(postService.updatePost(post, user)) {
+			model.addAttribute("msg", "°Ô½Ã±ÛÀ» ¼öÁ¤Çß½À´Ï´Ù.");
+		}else {
+			model.addAttribute("msg", "°Ô½Ã±ÛÀ» ¼öÁ¤ÇÏÁö ¸øÇß½À´Ï´Ù.");
+		}
+		model.addAttribute("url", "/post/detail/" + post.getPo_bo_num());
+		return "/msg/msg";
 	}
 }
