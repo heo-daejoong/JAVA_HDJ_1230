@@ -4,7 +4,7 @@
 # '호스트명' : 접근 권한
 #	- localhost : 내부에서만 가능 => 다른 PC에서 해당 DB에 접근 불가능
 #	- % : 외부에서도 접근 가능
-CREATE USER 'community_admin'@'%' IDENTIFIED BY 'admin';
+CREATE USER 'admin'@'%' IDENTIFIED BY 'admin';
 
 # 사용자 조회
 SELECT USER, HOST FROM MYSQL.USER;
