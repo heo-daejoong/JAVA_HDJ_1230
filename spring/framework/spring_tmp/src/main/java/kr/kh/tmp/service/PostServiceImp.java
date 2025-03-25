@@ -11,4 +11,13 @@ public class PostServiceImp implements PostService{
 	@Autowired
 	private PostDAO postDao;
 
+	@Override
+	public boolean insertBoard(String name) {
+		try {
+			return postDao.insertBoard(name);
+		}catch(Exception e) {
+			return false;
+		}
+	}
+
 }
