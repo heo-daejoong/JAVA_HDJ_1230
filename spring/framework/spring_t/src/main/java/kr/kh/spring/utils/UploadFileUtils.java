@@ -73,13 +73,13 @@ public class UploadFileUtils {
         // /2025/03/26/UUID_a.jpg
         return iconName.replace(File.separatorChar, '/');
     }
-    public static void delteFile(String uploadPath, String fi_name) {
+    public static void deleteFile(String uploadPath, String fi_name) {
     	// /2025/03/26/UUID_a.jpg => \\2025\\03\\26\\UUID_a.jpg
 		fi_name = fi_name.replace('/', File.separatorChar);
 		File file = new File(uploadPath + fi_name);
 		//파일이 존재하면 파일을 삭제
 		if(file.exists()) {
-				file.delete();
+		file.delete();
 		}
 	}
 }
