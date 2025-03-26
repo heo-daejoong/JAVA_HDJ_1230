@@ -8,10 +8,13 @@ import kr.kh.spring.model.vo.BoardVO;
 import kr.kh.spring.model.vo.FileVO;
 import kr.kh.spring.model.vo.MemberVO;
 import kr.kh.spring.model.vo.PostVO;
+import kr.kh.spring.pagination.Criteria;
+import kr.kh.spring.pagination.PageMaker;
+import kr.kh.spring.pagination.PostCriteria;
 
 public interface PostService {
 
-	List<PostVO> getPostList(int po_bo_num);
+	List<PostVO> getPostList(Criteria cri);
 
 	List<BoardVO> getBoardList();
 
@@ -27,11 +30,13 @@ public interface PostService {
 
 	boolean deletePost(int po_num, MemberVO user);
 
-	boolean updatePost(PostVO post, MemberVO user);
+	boolean updatePost(PostVO post, MemberVO user, MultipartFile[] fileList, int[] delNums);
 
 	void updateView(int po_num);
 
 	List<FileVO> getFileList(int po_num);
+
+	PageMaker getPageMaker(Criteria cri);
 
 	
 

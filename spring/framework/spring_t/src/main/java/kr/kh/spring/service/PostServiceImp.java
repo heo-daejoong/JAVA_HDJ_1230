@@ -13,6 +13,9 @@ import kr.kh.spring.model.vo.BoardVO;
 import kr.kh.spring.model.vo.FileVO;
 import kr.kh.spring.model.vo.MemberVO;
 import kr.kh.spring.model.vo.PostVO;
+import kr.kh.spring.pagination.Criteria;
+import kr.kh.spring.pagination.PageMaker;
+import kr.kh.spring.pagination.PostCriteria;
 import kr.kh.spring.utils.UploadFileUtils;
 
 @Service
@@ -25,8 +28,8 @@ public class PostServiceImp implements PostService {
 	private String uploadPath;
 
 	@Override
-	public List<PostVO> getPostList(int po_bo_num) {
-		return postDao.selectPostList(po_bo_num);
+	public List<PostVO> getPostList(Criteria cri) {
+		return postDao.selectPostList(cri);
 	}
 
 	@Override
@@ -150,7 +153,7 @@ public class PostServiceImp implements PostService {
 	}
 
 	@Override
-	public boolean updatePost(PostVO post, MemberVO user) {
+	public boolean updatePost(PostVO post, MemberVO user, MultipartFile[] fileList, int[] delNums) {
 		if(post == null || post.getPo_title().trim().length() == 0 || post.getPo_content().length() == 0) {
 			return false;
 		}
@@ -166,6 +169,27 @@ public class PostServiceImp implements PostService {
 		}
 		boolean res = postDao.updatePost(post);
 		
+		if(!res) {
+			return false;
+		}
+		
+		if(fileList == null || fileList.length == 0) {
+			return false;
+		}
+		
+		for(MultipartFile file : fileList) {
+			uploadFile(file, post.getPo_num());
+		}
+		
+		if(delNums == null || delNums.length == 0) {
+			return true;
+		}
+		//x버튼 눌러서 제거한 첨부파일 제거
+		for(int fi_num : delNums) {
+			FileVO fileVo = postDao.selectFile(fi_num);
+			deleteFile(fileVo);
+		}
+		
 		return res;
 	}
 
@@ -177,6 +201,12 @@ public class PostServiceImp implements PostService {
 	@Override
 	public List<FileVO> getFileList(int po_num) {
 		return postDao.selectFileList(po_num);
+	}
+
+	@Override
+	public PageMaker getPageMaker(Criteria cri) {
+		int totalCount = postDao.selectCountPostList(cri);
+		return new PageMaker(3, cri, totalCount);
 	}
 	
 }
