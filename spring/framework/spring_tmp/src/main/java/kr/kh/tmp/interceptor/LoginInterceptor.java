@@ -17,13 +17,14 @@ public class LoginInterceptor extends HandlerInterceptorAdapter{
 	    ModelAndView mv)
 	    throws Exception {
 		
-		//³Ñ°ÜÁØ È¸¿ø Á¤º¸¸¦ °¡Á®¿È
+		//ë„˜ê²¨ì¤€ íšŒì› ì •ë³´ë¥¼ ê°€ì ¸ì˜´
 		MemberVO user = (MemberVO)mv.getModel().get("user");
-		//È¸¿ø Á¤º¸°¡ ÀÖÀ¸¸é => ·Î±×ÀÎ¿¡ ¼º°øÇßÀ¸¸é
+		//íšŒì› ì •ë³´ê°€ ìˆìœ¼ë©´ => ë¡œê·¸ì¸ì— ì„±ê³µí–ˆìœ¼ë©´ 
 		if(user != null) {
-			//¼¼¼Ç¿¡ È¸¿ø Á¤º¸¸¦ Ãß°¡
+			//ì„¸ì…˜ì— íšŒì› ì •ë³´ë¥¼ ì¶”ê°€
 			request.getSession().setAttribute("user", user);
 		}
+		
 	}
 	@Override
 	public boolean preHandle(HttpServletRequest request, 

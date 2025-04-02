@@ -26,8 +26,9 @@ public class MemberInterceptor extends HandlerInterceptorAdapter{
 		MemberVO user = (MemberVO)request.getSession().getAttribute("user");
 		if(user == null) {
 			response.setContentType("text/html; charset=UTF-8");
-			response.getWriter().write("<script>alert('È¸¿ø¸¸ Á¢±ÙÇÒ ¼ö ÀÖ½À´Ï´Ù.')</script>");
-			response.getWriter().write("<script>location.href='"+ request.getContextPath() + "'</script>");
+			response.getWriter().write("<script>alert('íšŒì›ë§Œ ì ‘ê·¼í•  ìˆ˜ ìˆìŠµë‹ˆë‹¤.')</script>");
+			response.getWriter().write("<script>location.href='"+ request.getContextPath() 
+				+ "'</script>");
 			response.flushBuffer();
 			return false;
 		}

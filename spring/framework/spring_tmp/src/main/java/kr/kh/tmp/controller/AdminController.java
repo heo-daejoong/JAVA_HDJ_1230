@@ -21,41 +21,42 @@ public class AdminController {
 	
 	@GetMapping("/board")
 	public String board(Model model) {
-		//°Ô½ÃÆÇ ¸ñ·ÏÀ» °¡Á®¿È
+		//ê²Œì‹œíŒ ëª©ë¡ì„ ê°€ì ¸ì˜´
 		List<BoardVO> list = postService.getBoardList();
-		//È­¸é¿¡ Àü´Ş
+		//í™”ë©´ì— ì „ë‹¬
 		model.addAttribute("list", list);
 		return "/post/board";
 	}
 	
 	@PostMapping("/board/insert")
 	public String boardInsert(Model model, String name) {
+		
 		if(postService.insertBoard(name)) {
-			model.addAttribute("msg", "°Ô½ÃÆÇÀ» µî·ÏÇß½À´Ï´Ù.");
+			model.addAttribute("msg", "ê²Œì‹œíŒì„ ë“±ë¡í–ˆìŠµë‹ˆë‹¤.");
 		}else {
-			model.addAttribute("msg", "ÀÌ¹Ì µî·ÏµÈ °Ô½ÃÆÇÀÔ´Ï´Ù.");
+			model.addAttribute("msg", "ì´ë¯¸ ë“±ë¡ëœ ê²Œì‹œíŒì…ë‹ˆë‹¤.");
 		}
 		model.addAttribute("url", "/admin/board");
 		return "message";
 	}
-	
 	@PostMapping("/board/update")
 	public String boardUpdate(Model model, BoardVO board) {
+		
 		if(postService.updateBoard(board)) {
-			model.addAttribute("msg", "°Ô½ÃÆÇÀ» ¼öÁ¤Çß½À´Ï´Ù.");
+			model.addAttribute("msg", "ê²Œì‹œíŒì„ ìˆ˜ì •í–ˆìŠµë‹ˆë‹¤.");
 		}else {
-			model.addAttribute("msg", "ÀÌ¹Ì µî·ÏµÈ °Ô½ÃÆÇÀÔ´Ï´Ù.");
+			model.addAttribute("msg", "ì´ë¯¸ ë“±ë¡ëœ ê²Œì‹œíŒì…ë‹ˆë‹¤.");
 		}
 		model.addAttribute("url", "/admin/board");
 		return "message";
 	}
-	
 	@GetMapping("/board/delete")
 	public String boardDelete(Model model, int num) {
+		
 		if(postService.deleteBoard(num)) {
-			model.addAttribute("msg", "°Ô½ÃÆÇÀ» »èÁ¦Çß½À´Ï´Ù.");
+			model.addAttribute("msg", "ê²Œì‹œíŒì„ ì‚­ì œí–ˆìŠµë‹ˆë‹¤.");
 		}else {
-			model.addAttribute("msg", "°Ô½ÃÆÇÀ» »èÁ¦ÇÏÁö ¸øÇß½À´Ï´Ù.");
+			model.addAttribute("msg", "ê²Œì‹œíŒì„ ì‚­ì œí•˜ì§€ ëª»í–ˆìŠµë‹ˆë‹¤.");
 		}
 		model.addAttribute("url", "/admin/board");
 		return "message";

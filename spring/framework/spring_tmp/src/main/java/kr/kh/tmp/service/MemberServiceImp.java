@@ -12,25 +12,25 @@ public class MemberServiceImp implements MemberService {
 
 	@Autowired
 	MemberDAO memberDao;
-	
+
 	@Autowired
 	BCryptPasswordEncoder passwordEncoder;
-
+	
 	@Override
 	public boolean signup(MemberVO member) {
 		if(member == null) {
 			return false;
 		}
-		//¾ÆÀÌµğ, ºñ¹ø, ÀÌ¸ŞÀÏ À¯È¿¼º °Ë»ç
+		//ì•„ì´ë””, ë¹„ë²ˆ, ì´ë©”ì¼ ìœ íš¨ì„± ê²€ì‚¬
 		
-		//ºñ¹Ğ¹øÈ£ ¾ÏÈ£È­
+		//ë¹„ë°€ë²ˆí˜¸ ì•”í˜¸í™”
 		String encPw = passwordEncoder.encode(member.getMe_pw());
 		member.setMe_pw(encPw);
 		try {
-			//°¡ÀÔµÈ ¾ÆÀÌµğ·Î °¡ÀÔÇÑ °æ¿ì
+			//ê°€ì…ëœ ì•„ì´ë””ë¡œ ê°€ì…í•œ ê²½ìš°.
 			return memberDao.insertMember(member);
 		}catch(Exception e) {
-			e.printStackTrace();
+			//e.printStackTrace();
 			return false;
 		}
 	}
@@ -41,14 +41,15 @@ public class MemberServiceImp implements MemberService {
 			return null;
 		}
 		MemberVO user = memberDao.selectMember(member.getMe_id());
-		//¾ÆÀÌµğ°¡ ´Ù¸¥ °æ¿ì
+		//ì•„ì´ë””ê°€ ë‹¤ë¥¸ ê²½ìš°
 		if(user == null) {
 			return null;
 		}
-		//ºñ¹Ğ¹øÈ£°¡ ´Ù¸¥ °æ¿ì
+		//ë¹„ë°€ë²ˆí˜¸ê°€ ë‹¤ë¥¸ ê²½ìš°
 		if(!passwordEncoder.matches(member.getMe_pw(), user.getMe_pw())) {
-		return null;
+			return null;
 		}
+			
 		return user;
 	}
 }
