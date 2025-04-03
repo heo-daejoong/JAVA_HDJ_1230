@@ -23,22 +23,22 @@ public class AdminInterceptor extends HandlerInterceptorAdapter{
 	    Object handler, 
 	    ModelAndView modelAndView)
 	    throws Exception {
-
+		
 	}
 	@Override
 	public boolean preHandle(HttpServletRequest request, 
 			HttpServletResponse response, 
 			Object handler)
 			throws Exception {
-		//¼¼¼Ç¿¡ ÀÖ´Â È¸¿ø Á¤º¸¸¦ °¡Á®¿È
+		//ì„¸ì…˜ì— ìˆëŠ” íšŒì› ì •ë³´ë¥¼ ê°€ì ¸ì˜´
 		HttpSession session = request.getSession();
 		MemberVO user = (MemberVO)session.getAttribute("user");
-		//È¸¿ø Á¤º¸°¡ ÀÖ°í ±ÇÇÑÀÌ ADMINÀÌ¸é °¡´ø ±æ °¡°í
+		//íšŒì› ì •ë³´ê°€ ìˆê³  ê¶Œí•œì´ ADMINì´ë©´ ê°€ë˜ê¸¸ ê°€ê³ 
 		if(user != null && user.getMe_authority().equals("ADMIN")) {
 			return true;
 		}
-		messageService.sendMessage(response, request, "°ü¸®ÀÚ¸¸ Á¢±ÙÇÒ ¼ö ÀÖ´Â ÆäÀÌÁöÀÔ´Ï´Ù.", "/");
-		//¾Æ´Ï¸é ¸ŞÀÎ ÆäÀÌÁö·Î º¸³¿
+		messageService.sendMessage(response, request, "ê´€ë¦¬ìë§Œ ì ‘ê·¼í•  ìˆ˜ ìˆëŠ” í˜ì´ì§€ì…ë‹ˆë‹¤.", "/");
+		//ì•„ë‹ˆë©´ ë©”ì¸ í˜ì´ì§€ë¡œ ë³´ëƒ„
 		return false;
 	}
 }

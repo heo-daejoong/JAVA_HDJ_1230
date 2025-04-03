@@ -10,7 +10,7 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 import kr.kh.spring.model.vo.MemberVO;
 
 public class LoginInterceptor extends HandlerInterceptorAdapter{
-	//ÄÁÆ®·Ñ·¯¿¡¼­ ³ª¿Ã ¶§ °¡·ÎÃ¤´Â °æ¿ì È£ÃâÀÌ µÊ
+	//ì»¨íŠ¸ë¡¤ëŸ¬ì—ì„œ ë‚˜ì˜¬ ë•Œ ê°€ë¡œì±„ëŠ” ê²½ìš° í˜¸ì¶œì´ ë¨
 	@Override
 	public void postHandle(
 	    HttpServletRequest request, 
@@ -18,25 +18,25 @@ public class LoginInterceptor extends HandlerInterceptorAdapter{
 	    Object handler, 
 	    ModelAndView modelAndView)
 	    throws Exception {
-		//ÄÁÆ®·Ñ·¯°¡ º¸³»ÁØ È¸¿ø Á¤º¸¸¦ °¡Á®¿È
+		//ì»¨íŠ¸ë¡¤ëŸ¬ê°€ ë³´ë‚´ì¤€ íšŒì› ì •ë³´ë¥¼ ê°€ì ¸ì˜´
 		MemberVO user = (MemberVO)modelAndView.getModel().get("user");
 		
-		//°¡Á®¿Â È¸¿ø Á¤º¸°¡ ÀÖÀ¸¸é ¼¼¼Ç¿¡ È¸¿ø Á¤º¸¸¦ ÀúÀå
+		//ê°€ì ¸ì˜¨ íšŒì› ì •ë³´ê°€ ìˆìœ¼ë©´ ì„¸ì…˜ì— íšŒì› ì •ë³´ë¥¼ ì €ì¥
 		HttpSession session = request.getSession();
 		if(user != null) {
 			session.setAttribute("user", user);
 		}
 	}
-	//ÄÁÆ®·Ñ·¯·Î µé¾î°¡±âÀü °¡·ÎÃ¤´Â °æ¿ì È£ÃâÀÌ µÊ
-	//¸®ÅÏÀÌ trueÀÌ¸é °¡´ø URL·Î °¡¼­ ½ÇÇà
-	//¸®ÅÏÀÌ falseÀÌ¸é °¡´ø URL·Î °¡Áö ¸øÇÔ. º¸Åë ÀÌ °æ¿ì´Â redirect·Î ´Ù¸¥ URL·Î °¡¶ó°í ÇÔ.
+	//ì»¨íŠ¸ë¡¤ëŸ¬ë¡œ ë“¤ì–´ê°€ê¸°ì „ ê°€ë¡œì±„ëŠ” ê²½ìš° í˜¸ì¶œì´ ë¨
+	//ë¦¬í„´ì´ trueì´ë©´ ê°€ë˜ URLë¡œ ê°€ì„œ ì‹¤í–‰
+	//ë¦¬í„´ì´ falseì´ë©´ ê°€ë˜ URLë¡œ ê°€ì§€ ëª»í•¨. ë³´í†µ ì´ ê²½ìš°ëŠ” redirectë¡œ ë‹¤ë¥¸ URLë¡œ ê°€ë¼ê³  í•¨.
 	@Override
 	public boolean preHandle(HttpServletRequest request, 
 			HttpServletResponse response, 
 			Object handler)
 			throws Exception {
 			
-			//±¸Çö
+			//êµ¬í˜„
 			return true;
 	}
 }

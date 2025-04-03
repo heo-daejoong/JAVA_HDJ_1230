@@ -7,11 +7,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Criteria {
 	
-	protected int page = 1;//ÇöÀç ÆäÀÌÁö : ±âº»°ª - 1
-	protected int perPageNum = 10;//ÇÑ ÆäÀÌÁö¿¡¼­ ÄÁÅÙÃ÷ °³¼ö : ±âº»°ª - 10
+	protected int page = 1;//í˜„ìž¬ íŽ˜ì´ì§€ : ê¸°ë³¸ê°’ - 1
+	protected int perPageNum = 10;//í•œ íŽ˜ì´ì§€ì—ì„œ ì»¨í…ì¸  ê°œìˆ˜ : ê¸°ë³¸ê°’ - 10
 	
-	protected String search = ""; //°Ë»ö¾î : ±âº»°ª - ºó¹®ÀÚ¿­=> ÀüÃ¼ °Ë»ö
-	protected String type="0"; //°Ë»ö Å¸ÀÔ 
+	protected String search = ""; //ê²€ìƒ‰ì–´ : ê¸°ë³¸ê°’ - ë¹ˆë¬¸ìžì—´=> ì „ì²´ ê²€ìƒ‰
+	protected String type="0"; //ê²€ìƒ‰ íƒ€ìž… 
 	
 	public Criteria(int page, int perPageNum) {
 		this.page = page;

@@ -1,3 +1,4 @@
+
 package kr.kh.spring.interceptor;
 
 import javax.servlet.http.HttpServletRequest;
@@ -23,22 +24,22 @@ public class MemberInterceptor extends HandlerInterceptorAdapter{
 	    Object handler, 
 	    ModelAndView modelAndView)
 	    throws Exception {
-
+		
 	}
 	@Override
 	public boolean preHandle(HttpServletRequest request, 
 			HttpServletResponse response, 
 			Object handler)
 			throws Exception {
-		//¼¼¼Ç¿¡ ÀÖ´Â È¸¿ø Á¤º¸¸¦ °¡Á®¿È
+		//ì„¸ì…˜ì— ìˆëŠ” íšŒì› ì •ë³´ë¥¼ ê°€ì ¸ì˜´
 		HttpSession session = request.getSession();
 		MemberVO user = (MemberVO)session.getAttribute("user");
-		//·Î±×ÀÎ ÇßÀ¸¸é
+		//ë¡œê·¸ì¸ í–ˆìœ¼ë©´
 		if(user != null) {
 			return true;
 		}
-		//¾Æ´Ï¸é ¸ŞÀÎ ÆäÀÌÁö·Î º¸³¿
-		messageService.sendMessage(response, request, "·Î±×ÀÎÇÑ È¸¿ø¸¸ Á¢±ÙÇÒ ¼ö ÀÖ´Â ÆäÀÌÁöÀÔ´Ï´Ù.", "/");
+		//ì•„ë‹ˆë©´ ë©”ì¸ í˜ì´ì§€ë¡œ ë³´ëƒ„
+		messageService.sendMessage(response, request, "ë¡œê·¸ì¸í•œ íšŒì›ë§Œ ì ‘ê·¼í•  ìˆ˜ ìˆëŠ” í˜ì´ì§€ì…ë‹ˆë‹¤.", "/");
 		return false;
 	}
 }

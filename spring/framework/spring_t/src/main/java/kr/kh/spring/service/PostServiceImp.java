@@ -11,11 +11,11 @@ import org.springframework.web.multipart.MultipartFile;
 import kr.kh.spring.dao.PostDAO;
 import kr.kh.spring.model.vo.BoardVO;
 import kr.kh.spring.model.vo.FileVO;
+import kr.kh.spring.model.vo.LikeVO;
 import kr.kh.spring.model.vo.MemberVO;
 import kr.kh.spring.model.vo.PostVO;
 import kr.kh.spring.pagination.Criteria;
 import kr.kh.spring.pagination.PageMaker;
-import kr.kh.spring.pagination.PostCriteria;
 import kr.kh.spring.utils.UploadFileUtils;
 
 @Service
@@ -43,13 +43,12 @@ public class PostServiceImp implements PostService {
 			return false;
 		}
 		try {
-			//bo_nameÀÌ Áßº¹µÈ °æ¿ì ¿¹¿Ü ¹ß»ı => Ãß°¡ ½ÇÆĞ => return false;
+			//bo_nameì´ ì¤‘ë³µëœ ê²½ìš° ì˜ˆì™¸ ë°œìƒ => ì¶”ê°€ ì‹¤íŒ¨ => return false;
 			return postDao.insertBoard(bo_name);
 		}catch (Exception e) {
 			//e.printStackTrace();
 		}
 		return false;
-			
 	}
 
 	@Override
@@ -59,7 +58,7 @@ public class PostServiceImp implements PostService {
 
 	@Override
 	public boolean updateBoard(BoardVO board) {
-		if(board == null || board.getBo_name() == null ||board.getBo_name().trim().length() == 0) {
+		if(board == null || board.getBo_name() == null || board.getBo_name().trim().length() == 0) {
 			return false;
 		}
 		return postDao.updateBoard(board);
@@ -67,7 +66,9 @@ public class PostServiceImp implements PostService {
 
 	@Override
 	public boolean insertPost(PostVO post, MemberVO user, MultipartFile[] fileList) {
-		if(post == null || post.getPo_title().trim().length() == 0 || post.getPo_content().length() == 0) {
+		if(	post == null || 
+			post.getPo_title().trim().length() == 0 || 
+			post.getPo_content().length() == 0) {
 			return false;
 		}
 		if(user == null) {
@@ -81,7 +82,7 @@ public class PostServiceImp implements PostService {
 		}
 		
 		if(fileList == null || fileList.length == 0) {
-			return false;
+			return true;
 		}
 		
 		for(MultipartFile file : fileList) {
@@ -92,7 +93,7 @@ public class PostServiceImp implements PostService {
 
 	private void uploadFile(MultipartFile file, int po_num) {
 		String fi_ori_name = file.getOriginalFilename();
-		//ÆÄÀÏ¸íÀÌ ¾øÀ¸¸é
+		//íŒŒì¼ëª…ì´ ì—†ìœ¼ë©´
 		if(fi_ori_name == null || fi_ori_name.length() == 0) {
 			return;
 		}
@@ -115,20 +116,20 @@ public class PostServiceImp implements PostService {
 		if(user == null) {
 			return false;
 		}
-		//°Ô½Ã±Û Á¤º¸¸¦ °¡Á®¿È
+		//ê²Œì‹œê¸€ ì •ë³´ë¥¼ ê°€ì ¸ì˜´
 		PostVO post = postDao.selectPost(po_num);
-		//°Ô½Ã±ÛÀÇ ÀÛ¼ºÀÚ¿Í È¸¿øÀÌ ´Ù¸£¸é false ¸®ÅÏ
+		//ê²Œì‹œê¸€ì˜ ì‘ì„±ìì™€ íšŒì›ì´ ë‹¤ë¥´ë©´ false ë¦¬í„´
 		if(post == null || !post.getPo_me_id().equals(user.getMe_id())) {
 			return false;
 		}
-		//¾Æ´Ï¸é °Ô½Ã±Û ¼öÁ¤
+		//ê²Œì‹œê¸€ ìˆ˜ì •
 		boolean res = postDao.deletePost(po_num);
 		
 		if(!res) {
 			return false;
 		}
-		//Ã·ºÎÆÄÀÏ »èÁ¦
-		List<FileVO> fileList = postDao.selectFileList(po_num); 
+		//ì²¨ë¶€íŒŒì¼ ì‚­ì œ
+		List<FileVO> fileList = postDao.selectFileList(po_num);
 		
 		if(fileList == null || fileList.size() == 0) {
 			return true;
@@ -137,7 +138,7 @@ public class PostServiceImp implements PostService {
 		for(FileVO fileVo : fileList) {
 			deleteFile(fileVo);
 		}
-		
+		//dbì—ì„œ í•´ë‹¹ ì²¨ë¶€íŒŒì¼ì„ ì‚­ì œ
 		return true;
 	}
 
@@ -145,26 +146,28 @@ public class PostServiceImp implements PostService {
 		if(fileVo == null) {
 			return;
 		}
-		//½ÇÁ¦ Ã·ºÎÆÄÀÏÀ» »èÁ¦
+		//ì‹¤ì œ ì²¨ë¶€íŒŒì¼ì„ ì‚­ì œ
 		UploadFileUtils.deleteFile(uploadPath, fileVo.getFi_name());
 		
-		//db¿¡¼­ ÇØ´ç Ã·ºÎÆÄÀÏÀ» »èÁ¦
+		//dbì—ì„œ í•´ë‹¹ ì²¨ë¶€íŒŒì¼ì„ ì‚­ì œ
 		postDao.deleteFile(fileVo.getFi_num());
 	}
 
 	@Override
 	public boolean updatePost(PostVO post, MemberVO user, MultipartFile[] fileList, int[] delNums) {
-		if(post == null || post.getPo_title().trim().length() == 0 || post.getPo_content().length() == 0) {
+		if(	post == null || 
+			post.getPo_title().trim().length() == 0 || 
+			post.getPo_content().length() == 0) {
 			return false;
 		}
 		if(user == null) {
 			return false;
 		}
-		//ÀÛ¼ºÀÚÀÎÁö È®ÀÎ
-		//°Ô½Ã±Û Á¤º¸¸¦ °¡Á®¿È
-		PostVO dbpost = postDao.selectPost(post.getPo_num());
-		//°Ô½Ã±ÛÀÇ ÀÛ¼ºÀÚ¿Í È¸¿øÀÌ ´Ù¸£¸é false ¸®ÅÏ
-		if(dbpost == null || !dbpost.getPo_me_id().equals(user.getMe_id())) {
+		//ì‘ì„±ìì¸ì§€ í™•ì¸
+		//ê²Œì‹œê¸€ ì •ë³´ë¥¼ ê°€ì ¸ì˜´
+		PostVO dbPost = postDao.selectPost(post.getPo_num());
+		//ê²Œì‹œê¸€ì˜ ì‘ì„±ìì™€ íšŒì›ì´ ë‹¤ë¥´ë©´ false ë¦¬í„´
+		if(dbPost == null || !dbPost.getPo_me_id().equals(user.getMe_id())) {
 			return false;
 		}
 		boolean res = postDao.updatePost(post);
@@ -174,9 +177,9 @@ public class PostServiceImp implements PostService {
 		}
 		
 		if(fileList == null || fileList.length == 0) {
-			return false;
+			return true;
 		}
-		
+		//ìƒˆ ì²¨ë¶€íŒŒì¼ ì¶”ê°€
 		for(MultipartFile file : fileList) {
 			uploadFile(file, post.getPo_num());
 		}
@@ -184,13 +187,13 @@ public class PostServiceImp implements PostService {
 		if(delNums == null || delNums.length == 0) {
 			return true;
 		}
-		//x¹öÆ° ´­·¯¼­ Á¦°ÅÇÑ Ã·ºÎÆÄÀÏ Á¦°Å
+		//xë²„íŠ¼ ëˆŒëŸ¬ì„œ ì œê±°í•œ ì²¨ë¶€íŒŒì¼ ì œê±°
 		for(int fi_num : delNums) {
 			FileVO fileVo = postDao.selectFile(fi_num);
 			deleteFile(fileVo);
 		}
 		
-		return res;
+		return true;
 	}
 
 	@Override
@@ -208,5 +211,55 @@ public class PostServiceImp implements PostService {
 		int totalCount = postDao.selectCountPostList(cri);
 		return new PageMaker(3, cri, totalCount);
 	}
-	
+
+	@Override
+	public int updateLike(LikeVO like, MemberVO user) {
+		if(like == null || user == null) {
+			return -2;
+		}
+
+		like.setLi_me_id(user.getMe_id());
+		//ê¸°ì¡´ ì¶”ì²œ ì •ë³´ë¥¼ ê°€ì ¸ì˜´
+		LikeVO dbLike = postDao.selectLike(like);
+		System.out.println(dbLike);
+		//ì—†ìœ¼ë©´ ì¶”ê°€
+		if(dbLike == null) {
+			boolean res = postDao.insertLike(like);
+			if(!res) {
+				return -2;
+			}
+			return like.getLi_state();
+		}
+		//ìˆìœ¼ë©´ ì·¨ì†Œ, ì¶”ì²œ->ë¹„ì¶”ì²œ, ë¹„ì¶”ì²œ->ì¶”ì²œ
+		//ì·¨ì†Œí•˜ëŠ” ê²½ìš°
+		if(dbLike.getLi_state() == like.getLi_state()) {
+			like.setLi_state(0);
+		}
+		
+		boolean res = postDao.updateLike(like);
+		if(!res) {
+			return -2;
+		}
+		return like.getLi_state();
+	}
+
+	@Override
+	public void updateUpDown(int po_num) {
+		postDao.updateUpDown(po_num);
+		
+	}
+
+	@Override
+	public LikeVO getLike(int po_num, MemberVO user) {
+		if(user == null) {
+			return null;
+		}
+		LikeVO like = new LikeVO();
+		like.setLi_me_id(user.getMe_id());
+		like.setLi_po_num(po_num);
+		
+		return postDao.selectLike(like);
+	}
+
+		
 }

@@ -1,6 +1,8 @@
 package kr.kh.spring.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
@@ -10,15 +12,19 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import kr.kh.spring.model.vo.BoardVO;
 import kr.kh.spring.model.vo.FileVO;
+import kr.kh.spring.model.vo.LikeVO;
 import kr.kh.spring.model.vo.MemberVO;
 import kr.kh.spring.model.vo.PostVO;
 import kr.kh.spring.pagination.PageMaker;
 import kr.kh.spring.pagination.PostCriteria;
 import kr.kh.spring.service.PostService;
+
 
 @Controller
 public class PostController {
@@ -29,16 +35,13 @@ public class PostController {
 	@GetMapping("/post/list")
 	public String postList(Model model, PostCriteria cri) {
 		cri.setPerPageNum(2);
-		//°Ô½Ã±Û ¸ñ·Ï ÀüÃ¼¸¦ °¡Á®¿È
+		//ê²Œì‹œê¸€ ëª©ë¡ ì „ì²´ë¥¼ ê°€ì ¸ì˜´
 		List<PostVO> list = postService.getPostList(cri);
-		
 		List<BoardVO> boardList = postService.getBoardList();
-		
-		
 		PageMaker pm = postService.getPageMaker(cri);
 		
-		//È­¸é¿¡ °Ô½Ã±Û ¸ñ·ÏÀ» Àü¼Û
-		//¸ÅÆÛÀÇ resultType=kr.kh.spring.model.vo.postVO
+		//í™”ë©´ì— ê²Œì‹œê¸€ ëª©ë¡ì„ ì „ì†¡
+		//ë§¤í¼ì˜ resultType=kr.kh.spring.model.vo.postVO
 		model.addAttribute("boardList", boardList);
 		model.addAttribute("list", list);
 		model.addAttribute("pm", pm);
@@ -47,7 +50,7 @@ public class PostController {
 	
 	@GetMapping("/post/insert")
 	public String postInsert(Model model) {
-		//µî·ÏµÈ °Ô½ÃÆÇ ¸®½ºÆ®¸¦ °¡Á®¿Í È­¸é¿¡ Àü¼Û
+		//ë“±ë¡ëœ ê²Œì‹œíŒ ë¦¬ìŠ¤íŠ¸ë¥¼ ê°€ì ¸ì™€ì„œ í™”ë©´ì— ì „ì†¡
 		List<BoardVO> list = postService.getBoardList();
 		model.addAttribute("list", list);
 		return "/post/insert";
@@ -58,80 +61,96 @@ public class PostController {
 		MemberVO user = (MemberVO) session.getAttribute("user");
 		if(postService.insertPost(post, user, fileList)) {
 			model.addAttribute("url", "/post/list");
-			model.addAttribute("msg", "°Ô½Ã±ÛÀ» µî·ÏÇß½À´Ï´Ù.");
+			model.addAttribute("msg", "ê²Œì‹œê¸€ì„ ë“±ë¡í–ˆìŠµë‹ˆë‹¤.");
 		}else {
 			model.addAttribute("url", "/post/insert");
-			model.addAttribute("msg", "°Ô½Ã±ÛÀ» µî·ÏÇÏÁö ¸øÇß½À´Ï´Ù.");
+			model.addAttribute("msg", "ê²Œì‹œê¸€ì„ ë“±ë¡í•˜ì§€ ëª»í–ˆìŠµë‹ˆë‹¤.");
 		}
 		return "/msg/msg";
 	}
-	
 	@GetMapping("/post/detail/{po_num}")
-	public String postDetail(Model model, @PathVariable("po_num")int po_num) {
-		//°Ô½Ã±Û Á¶È¸¼ö¸¦ Áõ°¡
+	public String postDetail(Model model, @PathVariable("po_num")int po_num, HttpSession session) {
+		//ê²Œì‹œê¸€ ì¡°íšŒìˆ˜ë¥¼ ì¦ê°€
 		postService.updateView(po_num);
-		//°Ô½Ã±ÛÀ» °¡Á®¿È
+		//ê²Œì‹œê¸€ì„ ê°€ì ¸ì˜´
 		PostVO post = postService.getPost(po_num);
-		//Ã·ºÎÆÄÀÏÀ» °¡Á®¿È
+		//ì²¨ë¶€íŒŒì¼ì„ ê°€ì ¸ì˜´
 		List<FileVO> list = postService.getFileList(po_num);
-		//È­¸é¿¡ Àü¼Û
+		
+		MemberVO user = (MemberVO)session.getAttribute("user");
+		LikeVO like = postService.getLike(po_num, user);
+		
+		//í™”ë©´ì— ì „ì†¡
 		model.addAttribute("post", post);
 		model.addAttribute("list", list);
+		model.addAttribute("like", like);
 		return "/post/detail";
 	}
-	
 	@GetMapping("/post/delete/{po_num}")
 	public String postDelete(Model model, @PathVariable("po_num")int po_num, HttpSession session) {
-		//·Î±×ÀÎÇÑ È¸¿ø Á¤º¸¸¦ °¡Á®¿È
-		//ÃßÈÄ »èÁ¦ ¿¹Á¤
+		//ë¡œê·¸ì¸í•œ íšŒì› ì •ë³´ë¥¼ ê°€ì ¸ì˜´
 		MemberVO user = (MemberVO) session.getAttribute("user");
 		if(postService.deletePost(po_num, user)) {
 			model.addAttribute("url", "/post/list");
-			model.addAttribute("msg", "°Ô½Ã±ÛÀ» »èÁ¦Çß½À´Ï´Ù.");
+			model.addAttribute("msg", "ê²Œì‹œê¸€ì„ ì‚­ì œí–ˆìŠµë‹ˆë‹¤.");
 		}else {
 			model.addAttribute("url", "/post/detail/" + po_num);
-			model.addAttribute("msg", "°Ô½Ã±ÛÀ» »èÁ¦ÇÏÁö ¸øÇß½À´Ï´Ù.");
+			model.addAttribute("msg", "ê²Œì‹œê¸€ì„ ì‚­ì œí•˜ì§€ ëª»í–ˆìŠµë‹ˆë‹¤.");
 		}
 		return "/msg/msg";
 	}
-	
 	@GetMapping("/post/update/{po_num}")
 	public String postUpdate(Model model, @PathVariable("po_num")int po_num, HttpSession session) {
 		
-		//°Ô½Ã±ÛÀ» °¡Á®¿È
+		//ê²Œì‹œê¸€ì„ ê°€ì ¸ì˜´
 		PostVO post = postService.getPost(po_num);
-		//ÀÛ¼ºÀÚÀÎÁö ¾Æ´ÑÁö È®ÀÎÇÏ´Â ÀÛ¾÷
+		//ì‘ì„±ìì¸ì§€ ì•„ë‹Œì§€ í™•ì¸í•˜ëŠ” ì‘ì—… 
 		MemberVO user = (MemberVO) session.getAttribute("user");
-		
-		//·Î±×ÀÎ ¾ÈµÇ¾î ÀÖ°Å³ª, ¾ø´Â °Ô½Ã±ÛÀÌ°Å³ª, ÀÛ¼ºÀÚ°¡ ¾Æ´Ï¸é
+
+		//ë¡œê·¸ì¸ ì•ˆë˜ì–´ ìˆê±°ë‚˜, ì—†ëŠ” ê²Œì‹œê¸€ì´ê±°ë‚˜ ì‘ì„±ìê°€ ì•„ë‹ˆë©´
 		if(user == null || post == null || !post.getPo_me_id().equals(user.getMe_id())) {
 			model.addAttribute("url", "/post/list");
-			model.addAttribute("msg", "ÀÛ¼ºÀÚ°¡ ¾Æ´Ï°Å³ª ¾ø´Â °Ô½Ã±ÛÀÔ´Ï´Ù.");
+			model.addAttribute("msg", "ì‘ì„±ìê°€ ì•„ë‹ˆê±°ë‚˜ ì—†ëŠ” ê²Œì‹œê¸€ì…ë‹ˆë‹¤.");
 			return "/msg/msg";
 		}
+		
 		
 		List<BoardVO> list = postService.getBoardList();
 		
 		List<FileVO> fileList = postService.getFileList(po_num);
 		
-		//È­¸é¿¡ Àü¼Û
+		//í™”ë©´ì— ì „ì†¡
 		model.addAttribute("post", post);
 		model.addAttribute("list", list);
 		model.addAttribute("fileList", fileList);
-		return "/post/update";
-	
-	}
-	
-	@PostMapping("/post/update")
-	public String postUpdatePost(Model model, PostVO post, HttpSession session, MultipartFile [] fileList, int [] delNums) {
+		return "/post/update";			
 		
+		
+	}
+	@PostMapping("/post/update")
+	public String postUpdatePost(Model model, PostVO post, 
+			HttpSession session, MultipartFile [] fileList, int [] delNums) {
 		MemberVO user = (MemberVO) session.getAttribute("user");
 		if(postService.updatePost(post, user, fileList, delNums)) {
-			model.addAttribute("msg", "°Ô½Ã±ÛÀ» ¼öÁ¤Çß½À´Ï´Ù.");
+			model.addAttribute("msg", "ê²Œì‹œê¸€ì„ ìˆ˜ì •í–ˆìŠµë‹ˆë‹¤.");
 		}else {
-			model.addAttribute("msg", "°Ô½Ã±ÛÀ» ¼öÁ¤ÇÏÁö ¸øÇß½À´Ï´Ù.");
+			model.addAttribute("msg", "ê²Œì‹œê¸€ì„ ìˆ˜ì •í•˜ì§€ ëª»í–ˆìŠµë‹ˆë‹¤.");
 		}
-		model.addAttribute("url", "/post/detail/" + post.getPo_num());
+		model.addAttribute("url", "/post/detail/"+post.getPo_num());
 		return "/msg/msg";
+	}
+	
+	@ResponseBody
+	@PostMapping("/post/like")
+	public Map<String, Object> postLike(@RequestBody LikeVO like, HttpSession session) {
+		MemberVO user = (MemberVO)session.getAttribute("user");
+		int res = postService.updateLike(like, user);
+		postService.updateUpDown(like.getLi_po_num());
+		PostVO post = postService.getPost(like.getLi_po_num());
+		HashMap<String, Object>map = new HashMap<String, Object>();
+		map.put("res", res);
+		map.put("up", post.getPo_up());
+		map.put("down", post.getPo_down());
+		return map;
 	}
 }

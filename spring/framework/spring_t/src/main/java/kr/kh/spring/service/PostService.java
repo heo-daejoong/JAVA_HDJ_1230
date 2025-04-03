@@ -6,11 +6,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 import kr.kh.spring.model.vo.BoardVO;
 import kr.kh.spring.model.vo.FileVO;
+import kr.kh.spring.model.vo.LikeVO;
 import kr.kh.spring.model.vo.MemberVO;
 import kr.kh.spring.model.vo.PostVO;
 import kr.kh.spring.pagination.Criteria;
 import kr.kh.spring.pagination.PageMaker;
-import kr.kh.spring.pagination.PostCriteria;
 
 public interface PostService {
 
@@ -37,6 +37,12 @@ public interface PostService {
 	List<FileVO> getFileList(int po_num);
 
 	PageMaker getPageMaker(Criteria cri);
+
+	int updateLike(LikeVO like, MemberVO user);
+
+	void updateUpDown(int li_po_num);
+
+	LikeVO getLike(int po_num, MemberVO user);
 
 	
 

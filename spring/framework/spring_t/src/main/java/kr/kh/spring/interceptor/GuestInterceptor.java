@@ -23,22 +23,22 @@ public class GuestInterceptor extends HandlerInterceptorAdapter{
 	    Object handler, 
 	    ModelAndView modelAndView)
 	    throws Exception {
-
+		
 	}
 	@Override
 	public boolean preHandle(HttpServletRequest request, 
 			HttpServletResponse response, 
 			Object handler)
 			throws Exception {
-		//¼¼¼Ç¿¡ ÀÖ´Â È¸¿ø Á¤º¸¸¦ °¡Á®¿È
+		//ì„¸ì…˜ì— ìˆëŠ” íšŒì› ì •ë³´ë¥¼ ê°€ì ¸ì˜´
 		HttpSession session = request.getSession();
 		MemberVO user = (MemberVO)session.getAttribute("user");
-		//È¸¿ø Á¤º¸°¡ ¾øÀ¸¸é
+		//íšŒì› ì •ë³´ê°€ ì—†ìœ¼ë©´
 		if(user == null) {
 			return true;
 		}
-		//¾Æ´Ï¸é ¸ŞÀÎ ÆäÀÌÁö·Î º¸³¿
-		messageService.sendMessage(response, request, "·Î±×ÀÎÇÑ È¸¿øÀº Á¢±ÙÇÒ ¼ö ¾ø´Â ÆäÀÌÁöÀÔ´Ï´Ù.", "/");
+		//ì•„ë‹ˆë©´ ë©”ì¸ í˜ì´ì§€ë¡œ ë³´ëƒ„
+		messageService.sendMessage(response, request, "ë¡œê·¸ì¸í•œ íšŒì›ì€ ì ‘ê·¼í•  ìˆ˜ ì—†ëŠ” í˜ì´ì§€ì…ë‹ˆë‹¤.", "/");
 		return false;
 	}
 }

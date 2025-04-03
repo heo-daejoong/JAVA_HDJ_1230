@@ -28,7 +28,7 @@ public class AdminController {
 	
 	@GetMapping("/board")
 	public String board(Model model) {
-		//¸ğµç °Ô½ÃÆÇÀ» °¡Á®¿Í¼­ È­¸é¿¡ Àü¼Û
+		//ëª¨ë“  ê²Œì‹œíŒì„ ê°€ì ¸ì™€ì„œ í™”ë©´ì— ì „ì†¡
 		List<BoardVO> list = postService.getBoardList();
 		
 		model.addAttribute("list", list);
@@ -38,9 +38,9 @@ public class AdminController {
 	public String boardInsert(String bo_name, HttpServletResponse response, HttpServletRequest request){
 		
 		if(postService.insertBoard(bo_name)) {
-			messageService.sendMessage(response, request, "°Ô½ÃÆÇÀ» µî·ÏÇß½À´Ï´Ù.", "/admin/board");
+			messageService.sendMessage(response, request, "ê²Œì‹œíŒì„ ë“±ë¡í–ˆìŠµë‹ˆë‹¤.", "/admin/board");
 		}else {
-			messageService.sendMessage(response, request, "°Ô½ÃÆÇÀ» µî·ÏÇÏÁö ¸øÇß½À´Ï´Ù.", "/admin/board");
+			messageService.sendMessage(response, request, "ê²Œì‹œíŒì„ ë“±ë¡í•˜ì§€ ëª»í–ˆìŠµë‹ˆë‹¤.", "/admin/board");
 		}
 		
 		return "/admin/board";
@@ -50,9 +50,9 @@ public class AdminController {
 	public String boardDelete(int bo_num, HttpServletResponse response, HttpServletRequest request){
 		
 		if(postService.deleteBoard(bo_num)) {
-			messageService.sendMessage(response, request, "°Ô½ÃÆÇÀ» »èÁ¦Çß½À´Ï´Ù.", "/admin/board");
+			messageService.sendMessage(response, request, "ê²Œì‹œíŒì„ ì‚­ì œí–ˆìŠµë‹ˆë‹¤.", "/admin/board");
 		}else {
-			messageService.sendMessage(response, request, "°Ô½ÃÆÇÀ» »èÁ¦ÇÏÁö ¸øÇß½À´Ï´Ù.", "/admin/board");
+			messageService.sendMessage(response, request, "ê²Œì‹œíŒì„ ì‚­ì œí•˜ì§€ ëª»í–ˆìŠµë‹ˆë‹¤.", "/admin/board");
 		}
 		
 		return "/admin/board";
@@ -62,9 +62,9 @@ public class AdminController {
 	public String boardUpdate(BoardVO board, HttpServletResponse response, HttpServletRequest request){
 		
 		if(postService.updateBoard(board)) {
-			messageService.sendMessage(response, request, "°Ô½ÃÆÇÀ» ¼öÁ¤Çß½À´Ï´Ù.", "/admin/board");
+			messageService.sendMessage(response, request, "ê²Œì‹œíŒì„ ìˆ˜ì •í–ˆìŠµë‹ˆë‹¤.", "/admin/board");
 		}else {
-			messageService.sendMessage(response, request, "°Ô½ÃÆÇÀ» ¼öÁ¤ÇÏÁö ¸øÇß½À´Ï´Ù.", "/admin/board");
+			messageService.sendMessage(response, request, "ê²Œì‹œíŒì„ ìˆ˜ì •í•˜ì§€ ëª»í–ˆìŠµë‹ˆë‹¤.", "/admin/board");
 		}
 		
 		return "/admin/board";
