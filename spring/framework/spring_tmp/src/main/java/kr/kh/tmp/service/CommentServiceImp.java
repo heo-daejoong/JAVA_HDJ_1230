@@ -22,11 +22,10 @@ public class CommentServiceImp implements CommentService {
 
 	@Override
 	public boolean insertComment(CommentVO comment, MemberVO user) {
-		if(comment == null /*|| user == null*/) {
+		if(comment == null || user == null) {
 			return false;
 		}
-		//comment.setCo_me_id(user.getMe_id());
-		comment.setCo_me_id("asd");
+		comment.setCo_me_id(user.getMe_id());
 		return commentDao.insertComment(comment);
 	}
 
@@ -49,13 +48,10 @@ public class CommentServiceImp implements CommentService {
 
 	@Override
 	public boolean deleteComment(int co_num, MemberVO user) {
-		
-		/*if(user == null) {
+		if(user == null) {
 			return false;
-		}*/
+		}
 		CommentVO comment = commentDao.selectComment(co_num);
-		user = new MemberVO();
-		user.setMe_id("asd");
 		if(comment == null || !comment.getCo_me_id().equals(user.getMe_id())) {
 			return false;
 		}
@@ -68,8 +64,6 @@ public class CommentServiceImp implements CommentService {
 			return false;
 		}
 		CommentVO upComment = commentDao.selectComment(comment.getCo_num());
-		user = new MemberVO();
-		user.setMe_id("asd");
 		if(upComment == null || !upComment.getCo_me_id().equals(user.getMe_id())) {
 			return false;
 		}
