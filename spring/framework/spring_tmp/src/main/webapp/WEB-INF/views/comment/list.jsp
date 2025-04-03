@@ -18,7 +18,7 @@
 						<div class="comment-content">${co.co_content }</div>
 						<div>
 							<button class="btn btn-outline-success btn-reply" data-num="${co.co_num}">답글</button>
-							<button class="btn btn-outline-warning">수정</button>
+							<button class="btn btn-outline-warning btn-update" data-num="${co.co_num }">수정</button>
 							<button class="btn btn-outline-danger btn-delete" data-num="${co.co_num }">삭제</button>
 						</div>
 					</c:if>
@@ -97,6 +97,23 @@
 				}
 			});
 		});
+		$(".btn-update").click(function(e){
+			var $content = $(this).parents(".comment-item").find(".comment-content");
+			var content = $content.text();
+			$content.hide();
+			if($content.nextAll(".comment-update-form").length != 0){
+				return;
+			}
+			let num = $(this).data("num");
+			var str = `
+				<form class="comment-update-form" data-num="\${num}">
+					<textarea name="content">\${content}</textarea>
+					<button type="submit">댓글 수정</button>
+				</form>
+			`;
+			$content.after(str);
+			$(this).parent().hide();
+		})
 	</script>
 </body>
 </html>

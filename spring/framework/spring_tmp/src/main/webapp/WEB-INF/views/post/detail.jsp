@@ -49,6 +49,7 @@
 			<textarea name="content"></textarea>
 			<button type="submit">댓글 등록</button>
 		</form>
+
 	</div>
 	<div class="mb-3 d-flex justify-content-between">
 		<a href="<c:url value="/post/list?bo_num=${post.po_bo_num}"/>" class="btn btn-outline-success">목록으로</a>
@@ -115,6 +116,41 @@
 				}
 			});
 		}
+	</script>
+	
+	<script type="text/javascript">
+	$(document).on("submit", ".comment-update-form", function(e){
+		e.preventDefault();
+		var $content = $(this).find("[name=content]");
+		var content = $content.val();
+		var co_num = $(this).data("num");
+		
+		if(content.length == 0){
+			alert("수정할 댓글 내용을 입력하세요.");
+			$content.focus();
+			return;
+		}
+		
+		$.ajax({
+			async : true,
+			url : '<c:url value="/comment/update"/>', 
+			type : 'post', 
+			data : JSON.stringify({
+				co_content: content,
+				co_num : co_num
+			}), 
+			contentType : "application/json; charset=utf-8",
+			success : function (data){
+				if(data){
+					alert('댓글 수정!');
+					$content.val('');
+					getCommentList(cri);
+				}else{
+					alert('댓글 수정 실패!');
+				}
+			}
+		});
+	})
 	</script>
 </body>
 </html>

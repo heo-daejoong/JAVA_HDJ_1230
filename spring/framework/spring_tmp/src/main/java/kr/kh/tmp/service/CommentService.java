@@ -2,6 +2,8 @@ package kr.kh.tmp.service;
 
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
 import kr.kh.tmp.model.vo.CommentVO;
 import kr.kh.tmp.model.vo.MemberVO;
 import kr.kh.tmp.pagination.CommentCriteria;
@@ -17,5 +19,7 @@ public interface CommentService {
 	PageMaker getPageMaker(Criteria cri);
 
 	boolean deleteComment(int co_num, MemberVO user);
+
+	boolean updateComment(CommentVO comment, MemberVO user);
 
 }

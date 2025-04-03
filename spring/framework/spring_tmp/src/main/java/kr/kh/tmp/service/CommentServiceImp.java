@@ -2,6 +2,8 @@ package kr.kh.tmp.service;
 
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -58,5 +60,19 @@ public class CommentServiceImp implements CommentService {
 			return false;
 		}
 		return commentDao.deleteComment(co_num);
+	}
+
+	@Override
+	public boolean updateComment(CommentVO comment, MemberVO user) {
+		if(comment == null || user == null) {
+			return false;
+		}
+		CommentVO upComment = commentDao.selectComment(comment.getCo_num());
+		user = new MemberVO();
+		user.setMe_id("asd");
+		if(upComment == null || !upComment.getCo_me_id().equals(user.getMe_id())) {
+			return false;
+		}
+		return commentDao.updateComment(comment);
 	}
 }
