@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import kr.kh.spring.model.dto.PersonDTO;
 import kr.kh.spring.model.vo.MemberVO;
@@ -152,11 +154,12 @@ public class HomeController {
 	public String loginPost(Model model, MemberVO member) {
 		//화면에서 보낸 회원 정보와 일치하는 회원 정보를 DB에서 가져옴
 		MemberVO user = memberService.login(member);
-		//가져온 회원 정보를 인터셉터에게 전달
-		model.addAttribute("user", user);
 		if(user == null) {
 			return "redirect:/login";			
 		}
+		user.setAuto(member.isAuto());
+		//가져온 회원 정보를 인터셉터에게 전달
+		model.addAttribute("user", user);
 		return "redirect:/";
 	}
 	@GetMapping("/logout")
@@ -164,7 +167,18 @@ public class HomeController {
 		
 		//세션에 있는 user를 삭제
 		HttpSession session = request.getSession();
+		MemberVO user = (MemberVO)session.getAttribute("user");
 		session.removeAttribute("user");
+		if(user != null) {
+			user.setMe_cookie(null);
+			memberService.updateCookie(user);
+		}
 		return "redirect:/";
+	}
+	
+	@ResponseBody
+	@PostMapping("/check/id")
+	public boolean checkId(@RequestParam("id") String id){
+		return memberService.checkId(id);
 	}
 }
