@@ -147,7 +147,13 @@ public class HomeController {
 	}
 	
 	@GetMapping("/login")
-	public String login() {
+	public String login(HttpServletRequest request) {
+		//이전 url을 가져옴
+		String prevUrl = request.getHeader("Referer");
+		//이전 url이 있고, /login이 아니면 세션에 저장
+		if(prevUrl != null && !prevUrl.contains("/login")) {
+			request.getSession().setAttribute("prevUrl", prevUrl);
+		}
 		return "/member/login";
 	}
 	@PostMapping("/login")
@@ -160,7 +166,7 @@ public class HomeController {
 		user.setAuto(member.isAuto());
 		//가져온 회원 정보를 인터셉터에게 전달
 		model.addAttribute("user", user);
-		return "redirect:/";
+		return "msg/msg";
 	}
 	@GetMapping("/logout")
 	public String logout(HttpServletRequest request) {
