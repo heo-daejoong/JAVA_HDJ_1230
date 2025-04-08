@@ -15,7 +15,7 @@ function Convert(){
 				<input type="number" value={amount} onChange={(e)=>setAmount(e.target.value)}/>
 				<button onClick={convert}>변환</button>
 			</div>
-			<input type="number" value={res} readOnly/>
+			<input type="number" value={res} disabled/>
 		</div>
 	)
 }
