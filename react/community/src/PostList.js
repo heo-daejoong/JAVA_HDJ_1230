@@ -1,12 +1,15 @@
 import { useEffect, useState } from "react";
+import { useParams, Link } from "react-router-dom";
 
 function PostList(){
 	let [list, setList] = useState([]);
 	let [pm, setPm] = useState({});
 	let [boards, setBoards] = useState([]);
+	let {num} = useParams();
 
 	useEffect(()=>{
-		fetch("/api/react/post/list")
+
+		fetch("/api/react/post/list?po_bo_num="+num)
 		.then(res=>res.json())
 		.then(res=>{
 			setList(res.list);
@@ -19,8 +22,9 @@ function PostList(){
 		<div className="container">
 			<h1>게시글 목록</h1>
 			{
-				boards.map(v=>{
-					return (<button className="btn btn-outline-success me-2">{v.bo_name}</button>)
+				boards.map(board=>{
+					return (
+					<Link to={"/post/list/" + board.bo_num} className="btn btn-outline-success me-2">{board.bo_name}</Link>)
 				})
 			}
 			<table className="table table-striped table-hover">
