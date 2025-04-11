@@ -41,11 +41,7 @@ public class HomeController {
 	}
 	
 	@GetMapping("/login")
-	public String login(HttpServletRequest request) {
-		String prevUrl = request.getHeader("Refere");
-		if(prevUrl != null && !prevUrl.contains("/login")) {
-			request.getSession().setAttribute("prevUrl", prevUrl);
-		}
+	public String login() {
 		return "/member/login";
 	}
 	
@@ -55,7 +51,22 @@ public class HomeController {
 		if(user == null) {
 			return "redirect:/login";
 		}
+		//화면에서 자동 로그인 여부를 로그인한 회원 정보에 저장
+		user.setAuto(member.isAuto());
 		model.addAttribute("user", user);
 		return "redirect:/";
 	}
+	
+	@GetMapping("/logout")
+	public String logout(HttpSession session) {
+		//회원 정보에서 쿠키 값을 null로 수정
+		MemberVO user = (MemberVO)session.getAttribute("user");
+		if(user != null) {
+			memberService.updateCookie(user.getMe_id(), null, null);
+		}
+		session.removeAttribute("user");
+		
+		return "redirect:/";
+	}
+	
 }
