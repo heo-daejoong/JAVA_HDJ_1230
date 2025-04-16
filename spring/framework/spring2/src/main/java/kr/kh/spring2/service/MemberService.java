@@ -10,10 +10,8 @@ public interface MemberService {
 
 	MemberVO login(MemberVO member);
 
-	void updateCookie(String me_id, String id, Date date);
+	void updateMemberCookie(String me_id, String id, Date limitDate);
 
 	MemberVO getMemberByCookie(String me_cookie);
-
-	
 
 }

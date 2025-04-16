@@ -16,7 +16,7 @@ import kr.kh.spring2.service.MemberService;
 
 @Component
 public class AutoLoginInterceptor extends HandlerInterceptorAdapter{
-	
+
 	@Autowired
 	MemberService memberService;
 	
@@ -27,7 +27,6 @@ public class AutoLoginInterceptor extends HandlerInterceptorAdapter{
 	    Object handler, 
 	    ModelAndView mv)
 	    throws Exception {
-		 
 		
 	}
 	@Override
@@ -35,9 +34,9 @@ public class AutoLoginInterceptor extends HandlerInterceptorAdapter{
 			HttpServletResponse response, 
 			Object handler)
 			throws Exception {
-		
 		HttpSession session = request.getSession();
 		MemberVO user = (MemberVO)session.getAttribute("user");
+		
 		//로그인 했으면 true를 리턴
 		if(user != null) {
 			return true;

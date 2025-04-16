@@ -12,7 +12,7 @@ public interface MemberDAO {
 
 	MemberVO selectMember(@Param("me_id")String me_id);
 
-	void updateCookie(@Param("me_id")String me_id, @Param("me_cookie")String me_cookie, @Param("me_limit")Date me_limit);
+	void updateMemberCookie(@Param("me_id")String me_id, @Param("me_cookie")String me_cookie, @Param("me_limit")Date me_limit);
 
 	MemberVO selectMemberByCookie(@Param("me_cookie")String me_cookie);
 

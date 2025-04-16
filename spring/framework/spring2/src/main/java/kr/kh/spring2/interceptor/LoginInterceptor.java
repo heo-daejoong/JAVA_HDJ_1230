@@ -17,7 +17,7 @@ import kr.kh.spring2.service.MemberService;
 
 @Component
 public class LoginInterceptor extends HandlerInterceptorAdapter{
-	
+
 	@Autowired
 	MemberService memberService;
 	
@@ -31,27 +31,32 @@ public class LoginInterceptor extends HandlerInterceptorAdapter{
 		 //구현   
 		MemberVO user = (MemberVO)mv.getModel().get("user");
 		HttpSession session = request.getSession();
+
 		if(user == null) {
 			return;
 		}
+		
 		session.setAttribute("user", user);
-		//자동 로그인을 체크 안하면 종료
+		//자동 로그인을 체크안하면 종료
 		if(!user.isAuto()) {
 			return;
 		}
-		//쿠키를 생성. 유지시간 7일, 쿠키 이름 LC로. 값은 세션 아이디
+		
+		//쿠키를 생성. 유지시간 7일, 쿠키 이름을 LC로. 값은 세션id
+		int second = 7 * 24 * 60 * 60;
 		Cookie cookie = new Cookie("LC", session.getId());
 		cookie.setPath("/");
-		int second = 7 * 24 * 60 * 60;
 		cookie.setMaxAge(second);
-		//response 객체에 쿠키를 담아서 전송
-		response.addCookie(cookie);
+
 		//생성된 쿠키를 클라이언트에 전송
-		user.setMe_cookie(session.getId());
+		response.addCookie(cookie);
+		
 		//회원 정보에 쿠키값과 만료시간을 업데이트
-		Date date = new Date(System.currentTimeMillis() + second * 1000);
-		user.setMe_limit(date);
-		memberService.updateCookie(user.getMe_id(), session.getId(), date);
+		int ms = second * 1000;
+		long nowMs = System.currentTimeMillis() + ms; //7일후를 ms로 계산
+		Date limitDate = new Date(nowMs);
+		memberService.updateMemberCookie(user.getMe_id(), session.getId(), limitDate);
+		
 	}
 	@Override
 	public boolean preHandle(HttpServletRequest request, 
@@ -59,8 +64,8 @@ public class LoginInterceptor extends HandlerInterceptorAdapter{
 			Object handler)
 			throws Exception {
 			
-			//구현
-		System.out.println("인터셉터 : 컨트롤러에 들어가기 전");
-			return true;
+		//구현
+		System.out.println("인터센터 : 컨트롤러에 들어가기 전");
+		return true;
 	}
 }

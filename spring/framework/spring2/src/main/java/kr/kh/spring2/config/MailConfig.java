@@ -12,7 +12,7 @@ import java.util.Properties;
 @Configuration
 @PropertySource("classpath:config.properties")
 public class MailConfig {
-	
+
 	@Value("${email.username}")
 	private String username;
 	
@@ -25,8 +25,8 @@ public class MailConfig {
         mailSender.setHost("smtp.gmail.com");
         mailSender.setPort(587);
 
-        mailSender.setUsername("username"); 
-        mailSender.setPassword("password");       
+        mailSender.setUsername(username); 
+        mailSender.setPassword(password);       
 
         Properties props = mailSender.getJavaMailProperties();
         props.put("mail.transport.protocol", "smtp");

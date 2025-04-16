@@ -1,6 +1,5 @@
 package kr.kh.spring2.controller;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,30 +20,25 @@ public class HomeController {
 	
 	@GetMapping("/")
 	public String home() {
-		
 		return "home";
 	}
-	
 	@GetMapping("/signup")
 	public String signup() {
-		
 		return "/member/signup";
 	}
 	
 	@PostMapping("/signup")
-	public String signupMember(MemberVO member) {
+	public String signupPost(MemberVO member) {
 		boolean res = memberService.signup(member);
 		if(res) {
 			return "redirect:/";
 		}
 		return "redirect:/signup";
 	}
-	
 	@GetMapping("/login")
 	public String login() {
 		return "/member/login";
 	}
-	
 	@PostMapping("/login")
 	public String loginPost(Model model, MemberVO member) {
 		MemberVO user = memberService.login(member);
@@ -56,17 +50,15 @@ public class HomeController {
 		model.addAttribute("user", user);
 		return "redirect:/";
 	}
-	
 	@GetMapping("/logout")
 	public String logout(HttpSession session) {
-		//회원 정보에서 쿠키 값을 null로 수정
+		//회원 정보에서 쿠키값을 null로 수정
 		MemberVO user = (MemberVO)session.getAttribute("user");
 		if(user != null) {
-			memberService.updateCookie(user.getMe_id(), null, null);
+			memberService.updateMemberCookie(user.getMe_id(), null, null);
 		}
 		session.removeAttribute("user");
 		
 		return "redirect:/";
 	}
-	
 }
