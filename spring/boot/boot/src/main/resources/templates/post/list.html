@@ -10,6 +10,9 @@ layout:decorate="~{layout/layout.html}">
 </head>
 <body>
 	<main layout:fragment="content" class="container">
+		<div th:each="board : ${boardList}" class="mt-5 mb-5">
+			<a th:href="@{/post/list/{board.bo_num}}" class="btn btn-outline-success"></a>
+		</div>
 		<h1>게시글 목록</h1>
 		<table class="table table-bordered table-hover">
 			<thead>
