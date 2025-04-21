@@ -4,20 +4,26 @@ import java.lang.reflect.Member;
 import java.util.Arrays;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import kr.kh.boot.model.vo.MemberVO;
+import kr.kh.boot.service.MemberSrevice;
 
 
 @Controller
 public class HomeController {
+
+	@Autowired
+	MemberSrevice memberSrevice;
 	
 	@GetMapping("/")
 	public String home(Model model) {
 		model.addAttribute("name", "홍길동");
+		model.addAttribute("url", "/");
 		return "index";
 	}
 	
