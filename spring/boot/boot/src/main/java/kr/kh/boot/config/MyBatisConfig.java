@@ -18,18 +18,18 @@ public class MyBatisConfig {
 	@ConfigurationProperties(prefix = "spring.datasource")
     @Bean
     public DataSource dataSource() {
-        return DataSourceBuilder.create().build();
+			return DataSourceBuilder.create().build();
     }
 
 	@Bean
-    public SqlSessionFactory sqlSessionFactory(DataSource dataSource) throws Exception {
-        SqlSessionFactoryBean sessionFactory = new SqlSessionFactoryBean();
-        sessionFactory.setDataSource(dataSource);
-        sessionFactory.setMapperLocations(
-            new PathMatchingResourcePatternResolver().getResources("classpath:mappers/*.xml")
-        );
-         // TypeAlias 적용
-        sessionFactory.setTypeAliasesPackage("kr.kh.boot.model.vo");  // 여기에 패키지 경로 지정
-        return sessionFactory.getObject();
-    }
+	public SqlSessionFactory sqlSessionFactory(DataSource dataSource) throws Exception {
+		SqlSessionFactoryBean sessionFactory = new SqlSessionFactoryBean();
+		sessionFactory.setDataSource(dataSource);
+		sessionFactory.setMapperLocations(
+			new PathMatchingResourcePatternResolver().getResources("classpath:mappers/*.xml")
+		);
+			// TypeAlias 적용
+		sessionFactory.setTypeAliasesPackage("kr.kh.boot.model.vo");  // 여기에 패키지 경로 지정
+		return sessionFactory.getObject();
+	}
 }
