@@ -11,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 import kr.kh.boot.dao.PostDAO;
 import kr.kh.boot.model.vo.BoardVO;
 import kr.kh.boot.model.vo.CommentVO;
+import kr.kh.boot.model.vo.CustomUser;
 import kr.kh.boot.model.vo.FileVO;
 import kr.kh.boot.model.vo.MemberVO;
 import kr.kh.boot.model.vo.PostVO;
@@ -125,5 +126,45 @@ public class PostService {
 	private void deleteFile(FileVO file) {
 		UploadFileUtils.delteFile(uploadPath, file.getFi_name());
 		postDAO.deleteFile(file.getFi_num());
+	}
+
+	public void updatePost(PostVO post, CustomUser customUser, int[] dels, MultipartFile[] fileList) {
+		if(post == null || customUser == null){
+			return;
+		}
+		MemberVO user = customUser.getMember();
+		if(user == null){
+			return;
+		}
+		PostVO dbPost = postDAO.selectPost(post.getPo_num());
+		//작성자 체크
+		if(dbPost == null || !dbPost.getPo_me_id().equals(user.getMe_id())){
+			return;
+		}
+		//제목, 내용 체크
+		String po_title = post.getPo_title();
+		String po_content = post.getPo_content();
+		if(po_title == null || po_title.isBlank() || po_content == null || po_content.isBlank()){
+			return;
+		}
+		dbPost.setPo_title(po_title);
+		dbPost.setPo_content(po_content);
+		postDAO.updatePost(dbPost);
+
+		uploadFileList(post.getPo_num(), fileList);
+		deleteFileList(post.getPo_num(), dels);
+	}
+
+	private void deleteFileList(int po_num, int[] dels) {
+		if(dels == null || dels.length == 0){
+			return;
+		}
+		for(int del : dels){
+			FileVO file = postDAO.selectFile(del);
+			if(file == null || file.getFi_po_num() != po_num){
+				continue;
+			}
+			deleteFile(file);
+		}
 	}
 }
