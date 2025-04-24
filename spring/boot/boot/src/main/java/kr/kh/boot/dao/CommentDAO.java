@@ -12,5 +12,7 @@ public interface CommentDAO {
 	List<CommentVO> selectCommentList(Criteria cri);
 
 	int selectCountCommentList(Criteria cri);
+
+	boolean deleteComment(int co_num);
 	
 }
