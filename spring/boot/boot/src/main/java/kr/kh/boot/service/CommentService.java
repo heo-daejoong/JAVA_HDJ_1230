@@ -36,7 +36,7 @@ public class CommentService {
 		if(cri == null){
 			return null;
 		}
-		int count = commentDAO.selectCountCommentList(cri)
+		int count = commentDAO.selectCountCommentList(cri);
 		return new PageMaker(3, cri, count);
 	}
 }
