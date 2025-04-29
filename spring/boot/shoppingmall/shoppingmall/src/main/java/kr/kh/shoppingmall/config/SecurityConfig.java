@@ -19,12 +19,20 @@ public class SecurityConfig {
 					.anyRequest()
 					.permitAll()
 				)
-				.formLogin(form ->
-					form
-						.loginPage("/login")
-						.permitAll()
-						.loginProcessingUrl("/loginPost")
-						.defaultSuccessUrl("/")
+			.formLogin(form ->
+				form
+					.loginPage("/login")
+					.permitAll()
+					.loginProcessingUrl("/loginPost")
+					.defaultSuccessUrl("/")
+				)
+			.logout((logout) -> 
+				logout
+					.logoutUrl("/logoutPost")
+					.logoutSuccessUrl("/")
+					.clearAuthentication(true)
+					.invalidateHttpSession(true)
+					.permitAll()
 				);
 
 		return http.build();
