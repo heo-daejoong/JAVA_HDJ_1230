@@ -78,4 +78,10 @@ public class AdminController {
 		}
 		return "redirect:/admin/product/insert/";//+product.getPr_ca_num();
 	}
+
+	@PostMapping("/product/delete/{ca_num}/{pr_code}")
+	public String productDeletePost(@PathVariable String pr_code, @PathVariable int ca_num) {
+		productService.deleteProduct(pr_code);
+		return "redirect:/admin/product/" + ca_num;//+product.getPr_ca_num();
+	}
 }
