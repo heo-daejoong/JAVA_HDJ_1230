@@ -55,10 +55,12 @@ public class AdminController {
 		return productService.deleteCategory(num);
 	}
 
-	@GetMapping("/product")
-	public String product(Model model, Integer ca_num) {
-		List<ProductVO> productList = productService.getProductList(ca_num == null ? 0 : ca_num);
+	@GetMapping("/product/{ca_num}")
+	public String product(Model model, @PathVariable int ca_num) {
+		List<ProductVO> productList = productService.getProductList(ca_num);
+		List<CategoryVO> categoryList = productService.getCategory();
 		model.addAttribute("productList", productList);
+		model.addAttribute("categoryList", categoryList);
 		return "admin/product_list";
 	}
 	
