@@ -56,6 +56,6 @@
 	</select>
 
 	<select id="selectProduct" resultType="ProductVO">
-		select * from product where pr_del = "N" and pr_code = #{pr_code}
+		select * from product where pr_code = #{pr_code}
 	</select>
 </mapper>

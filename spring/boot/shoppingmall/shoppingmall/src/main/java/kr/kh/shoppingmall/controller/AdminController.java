@@ -84,4 +84,13 @@ public class AdminController {
 		productService.deleteProduct(pr_code);
 		return "redirect:/admin/product/" + ca_num;//+product.getPr_ca_num();
 	}
+
+	@GetMapping("/product/update/{ca_num}/{pr_code}")
+	public String productUpdate(Model model, @PathVariable String pr_code, @PathVariable int ca_num) {
+		ProductVO product = productService.getProduct(pr_code, false);
+
+		model.addAttribute("product", product);
+		return "admin/product_update";
+	}
+	
 }
