@@ -17,6 +17,8 @@ import kr.kh.shoppingmall.service.ProductService;
 
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.bind.annotation.RequestBody;
+
 
 @Controller
 @RequestMapping("/admin")
@@ -74,9 +76,9 @@ public class AdminController {
 	@PostMapping("/product/insert")
 	public String productInsertPost(ProductVO product, MultipartFile thumb) {
 		if(productService.insertProduct(product, thumb)){
-			return "redirect:/admin/product";//+product.getPr_ca_num();
+			return "redirect:/admin/product"+product.getPr_ca_num();
 		}
-		return "redirect:/admin/product/insert/";//+product.getPr_ca_num();
+		return "redirect:/admin/product/insert/"+product.getPr_ca_num();
 	}
 
 	@PostMapping("/product/delete/{ca_num}/{pr_code}")
@@ -100,4 +102,12 @@ public class AdminController {
 		}
 		return "redirect:/admin/product/update/" + product.getPr_code();//+product.getPr_ca_num();
 	}
+
+	@PostMapping("/product/amount")
+	@ResponseBody
+	public boolean postMethodName(@RequestBody ProductVO product) {
+		
+		return productService.updateAmount(product);
+	}
+	
 }

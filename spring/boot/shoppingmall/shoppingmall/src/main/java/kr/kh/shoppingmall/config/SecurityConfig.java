@@ -24,36 +24,38 @@ public class SecurityConfig {
 
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
-		http.authorizeHttpRequests(
-			requests->
-				requests
-					.requestMatchers("/admin/**")
-					.hasAnyAuthority(UserRole.ADMIN.name())
-					.anyRequest()
-					.permitAll()
-				)
-			.formLogin(form ->
-				form
-					.loginPage("/login")
-					.permitAll()
-					.loginProcessingUrl("/loginPost")
-					.defaultSuccessUrl("/")
-				)
-				//자동 로그인 처리
-					.rememberMe(rm-> rm
-					.userDetailsService(memberDetailService)//자동 로그인할 때 사용할 userDetailService를 추가
-					.key(rememberMeKey)//키가 변경되면 기존 토큰이 무효처리
-					.rememberMeCookieName("LC")//쿠키 이름
-					.tokenValiditySeconds(60 * 60 * 24 * 7)//유지 기간 : 7일
-				)
-			.logout((logout) -> 
-				logout
-					.logoutUrl("/logoutPost")
-					.logoutSuccessUrl("/")
-					.clearAuthentication(true)
-					.invalidateHttpSession(true)
-					.permitAll()
-				);
+		http
+			.csrf(csrf->csrf.disable())
+			.authorizeHttpRequests(
+				requests->
+					requests
+						.requestMatchers("/admin/**")
+						.hasAnyAuthority(UserRole.ADMIN.name())
+						.anyRequest()
+						.permitAll()
+					)
+				.formLogin(form ->
+					form
+						.loginPage("/login")
+						.permitAll()
+						.loginProcessingUrl("/loginPost")
+						.defaultSuccessUrl("/")
+					)
+					//자동 로그인 처리
+						.rememberMe(rm-> rm
+						.userDetailsService(memberDetailService)//자동 로그인할 때 사용할 userDetailService를 추가
+						.key(rememberMeKey)//키가 변경되면 기존 토큰이 무효처리
+						.rememberMeCookieName("LC")//쿠키 이름
+						.tokenValiditySeconds(60 * 60 * 24 * 7)//유지 기간 : 7일
+					)
+				.logout((logout) -> 
+					logout
+						.logoutUrl("/logoutPost")
+						.logoutSuccessUrl("/")
+						.clearAuthentication(true)
+						.invalidateHttpSession(true)
+						.permitAll()
+					);
 
 		return http.build();
 	}
