@@ -145,8 +145,9 @@ public class ProductService {
 	}
 
 	public boolean updateAmount(ProductVO product) {
-		if(product == null)
-		return false;
+		if(product == null){
+			return false;
+		}
 		ProductVO dbProduct = productDAO.selectProduct(product.getPr_code());
 		if(dbProduct == null){
 			return false;
@@ -156,6 +157,5 @@ public class ProductService {
 		}
 		dbProduct.setPr_amount(dbProduct.getPr_amount()+product.getPr_amount());
 		return productDAO.updateProduct(dbProduct);
-		
 	}
 }
