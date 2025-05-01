@@ -93,4 +93,11 @@ public class AdminController {
 		return "admin/product_update";
 	}
 	
+	@PostMapping("/product/update/{ca_num}")
+	public String productUpdatePost(ProductVO product, MultipartFile thumb, @PathVariable int ca_num) {
+		if(productService.updateProduct(product, thumb)){
+			return "redirect:/admin/product/" + ca_num;//+product.getPr_ca_num();
+		}
+		return "redirect:/admin/product/update/" + product.getPr_code();//+product.getPr_ca_num();
+	}
 }
